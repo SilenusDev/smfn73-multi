@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap Multisite Symfony 7.3 - Architecture Complète + Git Subtree</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .phase-card {
+            border-left: 4px solid #0d6efd;
+            margin-bottom: 2rem;
+        }
+        .step-item {
+            border-left: 2px solid #6c757d;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        .priority-critical { border-left-color: #dc3545; }
+        .priority-high { border-left-color: #fd7e14; }
+        .priority-medium { border-left-color: #ffc107; }
+        .priority-low { border-left-color: #198754; }
+        .git-highlight {
+            background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+        }
+        .architecture-highlight {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-dark text-light">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-3">
+                    <span class="badge bg-primary fs-2">🚀 Roadmap Multisite Symfony 7.3</span>
+                </h1>
+                <p class="text-center text-muted mb-5">Architecture Complète + Git Subtree + Mailer OAuth2 + Déploiement Sélectif</p>
+            </div>
+        </div>
+
+        <!-- Architecture & Git Strategy -->
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <div class="architecture-highlight">
+                    <h3><i class="bi bi-diagram-3"></i> Architecture Multisite</h3>
+                    <div class="mt-3">
+                        <h5>✅ Entités Blog Communes :</h5>
+                        <ul class="mb-3">
+                            <li>User, BlogPost, Category, Comment</li>
+                            <li><strong>MAIS données séparées par site</strong></li>
+                            <li>4 bases MariaDB indépendantes</li>
+                        </ul>
+                        
+                        <h5>✅ Spécificités par Site :</h5>
+                        <ul class="mb-0">
+                            <li>Entités métier spécifiques</li>
+                            <li>Controllers personnalisés</li>
+                            <li>Templates et assets uniques</li>
+                            <li>Configuration dédiée</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="git-highlight">
+                    <h3><i class="bi bi-git"></i> Stratégie Git Subtree</h3>
+                    <div class="mt-3">
+                        <h5>🔧 Développement Local :</h5>
+                        <ul class="mb-3">
+                            <li>1 repo avec tout (common + 4 sites)</li>
+                            <li>Push automatique vers 5 repos GitLab</li>
+                            <li>Scripts d'automatisation</li>
+                        </ul>
+                        
+                        <h5>🚀 Déploiement Production :</h5>
+                        <ul class="mb-0">
+                            <li>Pull sélectif : common + site(s) choisi(s)</li>
+                            <li>Serveurs multiples possibles</li>
+                            <li>Versioning indépendant par site</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Structure Finale -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card bg-info text-dark">
+                    <div class="card-header">
+                        <h3>📁 Structure Finale du Projet</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Développement Local :</h5>
+                                <div class="bg-dark text-light p-3 rounded">
+                                    <code>
+/symfony-multisite-dev/<br>
+├── /common/<br>
+│   ├── /src/Entity/<br>
+│   │   ├── User.php<br>
+│   │   ├── BlogPost.php<br>
+│   │   ├── Category.php<br>
+│   │   └── Comment.php<br>
+│   ├── /src/Service/<br>
+│   │   ├── SiteResolver.php<br>
+│   │   ├── DatabaseManager.php<br>
+│   │   └── MailerManager.php<br>
+│   └── /templates/common/<br>
+├── /site1/<br>
+│   ├── /src/Entity/Site1/<br>
+│   ├── /src/Controller/Site1/<br>
+│   ├── /templates/site1/<br>
+│   └── /assets/site1/<br>
+├── /site2/ (même structure)<br>
+├── /site3/ (même structure)<br>
+├── /site4/ (même structure)<br>
+└── /scripts/<br>
+    ├── git-push-all.sh<br>
+    └── git-pull-selective.sh
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Production (Exemple) :</h5>
+                                <div class="bg-dark text-light p-3 rounded mb-3">
+                                    <code>
+/production-server1/<br>
+├── /common/<br>
+└── /site1/<br><br>
+/production-server2/<br>
+├── /common/<br>
+├── /site2/<br>
+└── /site3/
+                                    </code>
+                                </div>
+                                
+                                <h5>Repos GitLab :</h5>
+                                <ul>
+                                    <li><code>multisite-common</code></li>
+                                    <li><code>multisite-site1</code></li>
+                                    <li><code>multisite-site2</code></li>
+                                    <li><code>multisite-site3</code></li>
+                                    <li><code>multisite-site4</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 1 - Git Subtree Setup -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-critical">
+                    <div class="card-header bg-danger">
+                        <h2>Phase 1 : Configuration Git Subtree</h2>
+                        <small>Durée estimée : 1 jour - PRIORITÉ ABSOLUE</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>1.1 - Création des 5 repos GitLab</h5>
+                            <ul>
+                                <li>Créer les repos : <code>multisite-common</code>, <code>multisite-site1</code>, <code>multisite-site2</code>, <code>multisite-site3</code>, <code>multisite-site4</code></li>
+                                <li>Initialiser avec README.md</li>
+                                <li>Configurer les droits d'accès</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>1.2 - Setup Git Subtree local</h5>
+                            <div class="bg-dark text-light p-2 rounded mb-3">
+                                <code>
+# Depuis le dossier principal<br>
+git subtree add --prefix=common git@gitlab.com:yourproject/multisite-common.git main<br>
+git subtree add --prefix=site1 git@gitlab.com:yourproject/multisite-site1.git main<br>
+git subtree add --prefix=site2 git@gitlab.com:yourproject/multisite-site2.git main<br>
+git subtree add --prefix=site3 git@gitlab.com:yourproject/multisite-site3.git main<br>
+git subtree add --prefix=site4 git@gitlab.com:yourproject/multisite-site4.git main
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>1.3 - Scripts d'automatisation</h5>
+                            <p><strong>Créer :</strong> <code>/scripts/git-push-all.sh</code></p>
+                            <div class="bg-dark text-light p-2 rounded mb-2">
+                                <code>
+#!/bin/bash<br>
+echo "🚀 Push vers tous les repos..."<br>
+git subtree push --prefix=common git@gitlab.com:yourproject/multisite-common.git main<br>
+git subtree push --prefix=site1 git@gitlab.com:yourproject/multisite-site1.git main<br>
+git subtree push --prefix=site2 git@gitlab.com:yourproject/multisite-site2.git main<br>
+git subtree push --prefix=site3 git@gitlab.com:yourproject/multisite-site3.git main<br>
+git subtree push --prefix=site4 git@gitlab.com:yourproject/multisite-site4.git main<br>
+echo "✅ Push terminé !"
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 2 - Apache & Domaines -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-critical">
+                    <div class="card-header bg-danger">
+                        <h2>Phase 2 : Configuration Apache & Domaines</h2>
+                        <small>Durée estimée : 1 jour</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>2.1 - Configuration /etc/hosts</h5>
+                            <div class="bg-dark text-light p-2 rounded mb-3">
+                                <code>
+# Ajout dans /etc/hosts<br>
+127.0.0.1    site1.local<br>
+127.0.0.1    site2.local<br>
+127.0.0.1    site3.local<br>
+127.0.0.1    site4.local
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>2.2 - VirtualHosts Apache</h5>
+                            <p><strong>4 VirtualHosts pointant vers le même DocumentRoot</strong></p>
+                            <div class="alert alert-info">
+                                Tous pointent vers <code>/var/www/symfony-multisite-dev/public</code>
+                            </div>
+                            <ul>
+                                <li>Créer les fichiers .conf dans sites-available</li>
+                                <li>Activer avec a2ensite</li>
+                                <li>Redémarrer Apache</li>
+                                <li>Tester l'accès aux 4 domaines</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>2.3 - Variables d'environnement</h5>
+                            <div class="bg-dark text-light p-2 rounded">
+                                <code>
+# .env<br>
+SITE1_DB_NAME=multisite_site1<br>
+SITE2_DB_NAME=multisite_site2<br>
+SITE3_DB_NAME=multisite_site3<br>
+SITE4_DB_NAME=multisite_site4<br>
+SITE1_MAILER_DSN=gmail+oauth2://...<br>
+# etc.
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 3 - Architecture Multisite -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-critical">
+                    <div class="card-header bg-danger">
+                        <h2>Phase 3 : Services Multisite Fondamentaux</h2>
+                        <small>Durée estimée : 2 jours - CŒUR DU SYSTÈME</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>3.1 - Service SiteResolver</h5>
+                            <p><strong>Emplacement :</strong> <code>/common/src/Service/SiteResolver.php</code></p>
+                            <p><strong>Symfony Features :</strong> <code>Service Container</code>, <code>RequestStack</code></p>
+                            <ul>
+                                <li>Méthode <code>getCurrentSite()</code> basée sur <code>$_SERVER['HTTP_HOST']</code></li>
+                                <li>Retourne 'site1', 'site2', 'site3' ou 'site4'</li>
+                                <li>Mapping domaine → site dans config</li>
+                                <li>Gestion erreur domaine inconnu</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>3.2 - EventSubscriber SiteInitializer</h5>
+                            <p><strong>Emplacement :</strong> <code>/common/src/EventSubscriber/SiteInitializerSubscriber.php</code></p>
+                            <p><strong>Symfony Features :</strong> <code>EventSubscriber</code>, <code>kernel.request</code></p>
+                            <ul>
+                                <li>Écoute <code>kernel.request</code> très tôt</li>
+                                <li>Injection du SiteResolver</li>
+                                <li>Définit le contexte global site actuel</li>
+                                <li>Accessible dans toute l'application</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>3.3 - Tests de détection par site</h5>
+                            <ul>
+                                <li>Page debug : <code>/debug/site</code></li>
+                                <li>Tester avec les 4 domaines locaux</li>
+                                <li>Vérifier détection correcte</li>
+                                <li>Tests unitaires SiteResolver</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 4 - Configuration Doctrine -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-critical">
+                    <div class="card-header bg-danger">
+                        <h2>Phase 4 : Configuration Doctrine Multi-Bases</h2>
+                        <small>Durée estimée : 2 jours - ISOLATION DONNÉES</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>4.1 - Création des 4 bases MariaDB</h5>
+                            <div class="bg-dark text-light p-2 rounded mb-3">
+                                <code>
+CREATE DATABASE multisite_site1;<br>
+CREATE DATABASE multisite_site2;<br>
+CREATE DATABASE multisite_site3;<br>
+CREATE DATABASE multisite_site4;<br>
+GRANT ALL ON multisite_site1.* TO 'your_user'@'localhost';<br>
+GRANT ALL ON multisite_site2.* TO 'your_user'@'localhost';<br>
+GRANT ALL ON multisite_site3.* TO 'your_user'@'localhost';<br>
+GRANT ALL ON multisite_site4.* TO 'your_user'@'localhost';
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>4.2 - Configuration Doctrine avec 4 Entity Managers</h5>
+                            <p><strong>Fichier :</strong> <code>/common/config/packages/doctrine.yaml</code></p>
+                            <p><strong>Symfony Features :</strong> <code>Doctrine Bundle</code>, <code>Multiple Connections</code></p>
+                            <ul>
+                                <li>4 connexions distinctes (site1, site2, site3, site4)</li>
+                                <li>4 Entity Managers séparés</li>
+                                <li>Mapping : entités communes + spécifiques par site</li>
+                                <li>Variables d'environnement par base</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>4.3 - Service DatabaseManager</h5>
+                            <p><strong>Emplacement :</strong> <code>/common/src/Service/DatabaseManager.php</code></p>
+                            <p><strong>Objectif :</strong> Obtenir automatiquement le bon Entity Manager</p>
+                            <ul>
+                                <li>Injection SiteResolver</li>
+                                <li>Méthode <code>getEntityManager()</code> contextuelle</li>
+                                <li>Méthode <code>getRepository($entity)</code> contextuelle</li>
+                                <li>Gestion erreurs connexion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 5 - Entités Blog -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-high">
+                    <div class="card-header bg-warning text-dark">
+                        <h2>Phase 5 : Entités Blog Communes</h2>
+                        <small>Durée estimée : 2 jours - STRUCTURE DONNÉES</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>5.1 - Entités communes dans /common/</h5>
+                            <p><strong>Emplacement :</strong> <code>/common/src/Entity/</code></p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Entités blog :</strong>
+                                    <ul>
+                                        <li><code>User.php</code> (avec UserInterface)</li>
+                                        <li><code>BlogPost.php</code></li>
+                                        <li><code>Category.php</code></li>
+                                        <li><code>Comment.php</code></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Relations :</strong>
+                                    <ul>
+                                        <li>BlogPost → Category (ManyToOne)</li>
+                                        <li>BlogPost → Comments (OneToMany)</li>
+                                        <li>User → BlogPosts (OneToMany)</li>
+                                        <li>User → Comments (OneToMany)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>5.2 - Entités spécifiques par site</h5>
+                            <p><strong>Exemple :</strong> <code>/site1/src/Entity/Site1/Product.php</code></p>
+                            <ul>
+                                <li>Entités métier spécifiques (Product, Service, Booking...)</li>
+                                <li>Relations possibles avec entités communes</li>
+                                <li>Namespace différent par site</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>5.3 - Traits réutilisables</h5>
+                            <p><strong>Emplacement :</strong> <code>/common/src/Entity/Traits/</code></p>
+                            <ul>
+                                <li><code>TimestampableTrait</code> (created_at, updated_at)</li>
+                                <li><code>SluggableTrait</code> (génération slug automatique)</li>
+                                <li><code>PublishableTrait</code> (status, published_at)</li>
+                                <li><code>SeoTrait</code> (meta_title, meta_description)</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>5.4 - Migrations pour les 4 bases</h5>
+                            <p><strong>Symfony Features :</strong> <code>DoctrineMigrationsBundle</code></p>
+                            <ul>
+                                <li>Générer migrations pour chaque Entity Manager</li>
+                                <li>Script d'exécution pour les 4 bases</li>
+                                <li>Fixtures communes et spécifiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 6 - Mailer OAuth2 -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-high">
+                    <div class="card-header" style="background-color: #e83e8c; color: white;">
+                        <h2>Phase 6 : Mailer OAuth2 par Site</h2>
+                        <small>Durée estimée : 2 jours - EMAIL CONTEXTUEL</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>6.1 - Configuration OAuth2 Gmail par site</h5>
+                            <p><strong>Emplacement config :</strong> <code>/common/config/packages/mailer.yaml</code></p>
+                            <p><strong>Bundle :</strong> <code>league/oauth2-google</code></p>
+                            <div class="alert alert-success">
+                                <strong>Stratégie :</strong> 4 comptes Gmail avec OAuth2 pour isolation complète
+                            </div>
+                            <ul>
+                                <li>Créer 4 projets Google Cloud Console</li>
+                                <li>4 sets de credentials OAuth2</li>
+                                <li>Configuration dans variables d'environnement</li>
+                                <li>Gestion refresh tokens par site</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>6.2 - Service MailerManager</h5>
+                            <p><strong>Emplacement :</strong> <code>/common/src/Service/MailerManager.php</code></p>
+                            <p><strong>Objectif :</strong> Envoi automatique avec bon compte selon site</p>
+                            <ul>
+                                <li>Injection SiteResolver + Mailer</li>
+                                <li>Sélection automatique transport OAuth2</li>
+                                <li>Méthodes <code>sendEmail()</code> et <code>sendTemplatedEmail()</code></li>
+                                <li>Gestion erreurs envoi par site</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>6.3 - Templates email avec fallback</h5>
+                            <ul>
+                                <li>Templates communs : <code>/common/templates/emails/</code></li>
+                                <li>Templates spécifiques : <code>/site1/templates/emails/</code></li>
+                                <li>Système de fallback automatique</li>
+                                <li>Variables contextuelles (expéditeur, signature)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 7 - Authentification -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-medium">
+                    <div class="card-header" style="background-color: #6f42c1; color: white;">
+                        <h2>Phase 7 : Authentification Contextuelle</h2>
+                        <small>Durée estimée : 2-3 jours - SÉCURITÉ</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>7.1 - UserProvider contextuel</h5>
+                            <p><strong>Emplacement :</strong> <code>/common/src/Security/SiteAwareUserProvider.php</code></p>
+                            <p><strong>Symfony Features :</strong> <code>UserProviderInterface</code>, <code>Security Component</code></p>
+                            <ul>
+                                <li>Injection DatabaseManager</li>
+                                <li>Recherche utilisateur dans la bonne base</li>
+                                <li>Isolation complète des comptes</li>
+                                <li>Support refresh et load by identifier</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>7.2 - Configuration Security</h5>
+                            <p><strong>Fichier :</strong> <code>/common/config/packages/security.yaml</code></p>
+                            <div class="alert alert-info">
+                                <strong>Stratégie :</strong> 1 firewall principal avec UserProvider contextuel
+                            </div>
+                            <ul>
+                                <li>Firewall unique avec SiteAwareUserProvider</li>
+                                <li>Routes login/logout communes</li>
+                                <li>Sessions isolées par domaine</li>
+                                <li>Gestion rôles par site</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>7.3 - Controllers authentification</h5>
+                            <ul>
+                                <li>LoginController commun</li>
+                                <li>Templates login avec override par site</li>
+                                <li>Redirections contextuelles</li>
+                                <li>Tests connexion sur 4 sites</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 8 - Controllers et Templates -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-medium">
+                    <div class="card-header" style="background-color: #20c997; color: white;">
+                        <h2>Phase 8 : Controllers et Templates par Site</h2>
+                        <small>Durée estimée : 3-4 jours - FONCTIONNALITÉS</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>8.1 - BaseController commun</h5>
+                            <p><strong>Emplacement :</strong> <code>/common/src/Controller/BaseController.php</code></p>
+                            <ul>
+                                <li>Injection : SiteResolver, DatabaseManager, MailerManager</li>
+                                <li>Méthodes utilitaires : <code>getCurrentSite()</code>, <code>getEM()</code>, <code>sendEmail()</code></li>
+                                <li>Gestion centralisée des erreurs</li>
+                                <li>Tous les controllers étendent BaseController</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>8.2 - Controllers spécifiques par site</h5>
+                            <p><strong>Exemple :</strong> <code>/site1/src/Controller/Site1/HomeController.php</code></p>
+                            <ul>
+                                <li>BlogController par site (avec spécificités)</li>
+                                <li>Controllers métier spécifiques</li>
+                                <li>Namespace et routing adaptés</li>
+                                <li>Repositories contextuels automatiques</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>8.3 - Organisation templates hiérarchique</h5>
+                            <div class="bg-dark text-light p-2 rounded mb-3">
+                                <code>
+/common/templates/<br>
+├── base.html.twig<br>
+├── /blog/ (templates base)<br>
+└── /emails/<br><br>
+/site1/templates/<br>
+├── base.html.twig (extends common)<br>
+├── /blog/ (overrides)<br>
+└── /pages/
+                                </code>
+                            </div>
+                            <ul>
+                                <li>Héritage avec fallback automatique</li>
+                                <li>Variables Twig globales contextuelles</li>
+                                <li>Service TemplateResolver</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 9 - Assets et Webpack -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-medium">
+                    <div class="card-header bg-secondary">
+                        <h2>Phase 9 : Assets et Webpack Encore</h2>
+                        <small>Durée estimée : 2-3 jours - FRONT-END</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>9.1 - Configuration Webpack multisite</h5>
+                            <p><strong>Fichier :</strong> <code>webpack.config.js</code></p>
+                            <p><strong>Tools :</strong> <code>Symfony Webpack Encore</code>, <code>SCSS</code></p>
+                            <div class="alert alert-info">
+                                <strong>Stratégie :</strong> Entry points communs + spécifiques par site
+                            </div>
+                            <ul>
+                                <li>Entry <code>common</code> : SCSS/JS partagés</li>
+                                <li>Entry <code>site1</code>, <code>site2</code>, etc. : Assets spécifiques</li>
+                                <li>Variables SCSS communes importées</li>
+                                <li>Build optimisé avec code splitting</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>9.2 - SCSS modulaire</h5>
+                            <div class="bg-dark text-light p-2 rounded mb-3">
+                                <code>
+/common/assets/<br>
+├── /styles/<br>
+│   ├── _variables.scss<br>
+│   ├── _mixins.scss<br>
+│   └── common.scss<br>
+└── /js/<br><br>
+/site1/assets/<br>
+├── /styles/<br>
+│   ├── _site1-variables.scss<br>
+│   └── site1.scss<br>
+└── /js/
+                                </code>
+                            </div>
+                            <ul>
+                                <li>Variables communes + override par site</li>
+                                <li>Compilation séparée par site</li>
+                                <li>Optimisation et minification</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>9.3 - AssetManager contextuel</h5>
+                            <p><strong>Objectif :</strong> Charger automatiquement les bons assets</p>
+                            <ul>
+                                <li>Service pour résolution assets par site</li>
+                                <li>Helper Twig pour inclusion contextuelle</li>
+                                <li>Cache et versioning assets</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 10 - Admin Interface -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-low">
+                    <div class="card-header bg-dark">
+                        <h2>Phase 10 : Interface d'Administration</h2>
+                        <small>Durée estimée : 2-3 jours - GESTION</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>10.1 - AdminController contextuel</h5>
+                            <p><strong>Emplacement :</strong> <code>/common/src/Controller/Admin/AdminController.php</code></p>
+                            <ul>
+                                <li>Dashboard avec stats du site actuel</li>
+                                <li>CRUD contextuels (posts, users, comments)</li>
+                                <li>Gestion des utilisateurs du site</li>
+                                <li>Interface avec EasyAdmin</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>10.2 - Permissions et sécurité admin</h5>
+                            <ul>
+                                <li>Rôles admin par site</li>
+                                <li>Voter pour l'accès aux données</li>
+                                <li>Audit trail des modifications</li>
+                                <li>Interface de switching entre sites</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>10.3 - Outils de gestion multisite</h5>
+                            <ul>
+                                <li>Vue globale des 4 sites</li>
+                                <li>Statistiques comparatives</li>
+                                <li>Import/Export de données</li>
+                                <li>Outils de maintenance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 11 - Scripts Déploiement -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-low">
+                    <div class="card-header" style="background-color: #fd7e14; color: white;">
+                        <h2>Phase 11 : Scripts de Déploiement Avancés</h2>
+                        <small>Durée estimée : 2 jours - AUTOMATISATION</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>11.1 - Script de déploiement production</h5>
+                            <p><strong>Fichier :</strong> <code>/scripts/deploy-production.sh</code></p>
+                            <div class="bg-dark text-light p-2 rounded mb-3">
+                                <code>
+#!/bin/bash<br>
+# Usage: ./deploy-production.sh server1 site1,site3<br>
+SERVER=$1<br>
+SITES=$2<br><br>
+echo "🚀 Déploiement vers $SERVER avec sites: $SITES"<br>
+ssh $SERVER "cd /var/www && git subtree pull common main"<br>
+for site in $(echo $SITES | tr "," "\n"); do<br>
+&nbsp;&nbsp;ssh $SERVER "cd /var/www && git subtree pull $site main"<br>
+done<br>
+echo "✅ Déploiement terminé !"
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>11.2 - Scripts de maintenance</h5>
+                            <ul>
+                                <li><code>migrate-all.sh</code> : Migrations sur toutes les bases</li>
+                                <li><code>cache-clear-all.sh</code> : Clear cache tous sites</li>
+                                <li><code>assets-build.sh</code> : Build assets pour déploiement</li>
+                                <li><code>backup-sites.sh</code> : Sauvegarde sélective</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>11.3 - Configuration CI/CD</h5>
+                            <p><strong>GitLab CI :</strong> Pipeline par repo</p>
+                            <ul>
+                                <li>Tests automatisés par site</li>
+                                <li>Build et déploiement automatique</li>
+                                <li>Rollback automatique en cas d'erreur</li>
+                                <li>Notifications déploiement</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 12 - Tests -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-low">
+                    <div class="card-header bg-success">
+                        <h2>Phase 12 : Tests et Validation</h2>
+                        <small>Durée estimée : 2-3 jours - QUALITÉ</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>12.1 - Tests unitaires services</h5>
+                            <p><strong>Symfony Features :</strong> <code>PHPUnit Bridge</code></p>
+                            <ul>
+                                <li>Tests SiteResolver (détection par domaine)</li>
+                                <li>Tests DatabaseManager (bonne base par site)</li>
+                                <li>Tests MailerManager (bon expéditeur par site)</li>
+                                <li>Tests UserProvider contextuel</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>12.2 - Tests fonctionnels par site</h5>
+                            <p><strong>Symfony Features :</strong> <code>WebTestCase</code></p>
+                            <ul>
+                                <li>Tests navigation blog par site</li>
+                                <li>Tests authentification isolée</li>
+                                <li>Tests envoi emails contextuels</li>
+                                <li>Tests admin par site</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>12.3 - Tests d'intégration multisite</h5>
+                            <ul>
+                                <li>Tests isolation des données</li>
+                                <li>Tests performance avec 4 bases</li>
+                                <li>Tests déploiement Git Subtree</li>
+                                <li>Tests de charge par site</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workflow Git Subtree -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-purple text-white" style="background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);">
+                    <div class="card-header">
+                        <h3>🔄 Workflow Git Subtree - Usage Quotidien</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>💻 Développement Local :</h5>
+                                <div class="bg-dark text-light p-2 rounded mb-3">
+                                    <code>
+# Développement normal<br>
+git add .<br>
+git commit -m "Feature: nouvelle fonctionnalité"<br><br>
+# Push vers tous les repos<br>
+./scripts/git-push-all.sh<br><br>
+# Ou push sélectif<br>
+git subtree push --prefix=common origin main<br>
+git subtree push --prefix=site1 origin main
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>🚀 Déploiement Production :</h5>
+                                <div class="bg-dark text-light p-2 rounded mb-3">
+                                    <code>
+# Serveur 1 : common + site1<br>
+ssh server1<br>
+git subtree pull common main<br>
+git subtree pull site1 main<br><br>
+# Serveur 2 : common + site2 + site3<br>
+ssh server2<br>
+git subtree pull common main<br>
+git subtree pull site2 main<br>
+git subtree pull site3 main<br><br>
+# Ou avec script<br>
+./deploy-production.sh server1 site1<br>
+./deploy-production.sh server2 site2,site3
+                                    </code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommandations -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card bg-success text-white">
+                    <div class="card-header">
+                        <h3>✅ Recommandations d'Expert</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h5>🎯 Priorités :</h5>
+                                <ul>
+                                    <li>Phases 1-4 : Fondamentaux absolus</li>
+                                    <li>Phases 5-7 : Cœur fonctionnel</li>
+                                    <li>Phases 8-12 : Optimisations</li>
+                                    <li>Tester avec 2 sites d'abord</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>🔐 Sécurité :</h5>
+                                <ul>
+                                    <li>Isolation complète des données</li>
+                                    <li>Sessions séparées par domaine</li>
+                                    <li>Credentials OAuth2 distincts</li>
+                                    <li>Tests de sécurité réguliers</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>⚡ Performance :</h5>
+                                <ul>
+                                    <li>Cache par Entity Manager</li>
+                                    <li>Assets optimisés par site</li>
+                                    <li>Monitoring per-site</li>
+                                    <li>Scaling horizontal facile</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5>🎉 Avantages de cette Architecture :</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li>✅ Développement unifié local</li>
+                                            <li>✅ Déploiement sélectif flexible</li>
+                                            <li>✅ Isolation maximale des sites</li>
+                                            <li>✅ Code réutilisable (blog commun)</li>
+                                            <li>✅ Mailer OAuth2 par site</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li>✅ Versioning indépendant par site</li>
+                                            <li>✅ Scaling par site possible</li>
+                                            <li>✅ Maintenance simplifiée</li>
+                                            <li>✅ Sécurité renforcée</li>
+                                            <li>✅ Evolution progressive</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card bg-info text-dark">
+                    <div class="card-header">
+                        <h3>📅 Timeline Recommandée</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5>Semaine 1 :</h5>
+                                <ul>
+                                    <li>Phase 1-2 : Git + Apache</li>
+                                    <li>Phase 3-4 : Services + DB</li>
+                                    <li>Tests fondamentaux</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-3">
+                                <h5>Semaine 2 :</h5>
+                                <ul>
+                                    <li>Phase 5-6 : Entités + Mailer</li>
+                                    <li>Phase 7 : Authentification</li>
+                                    <li>Tests avec 2 sites</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-3">
+                                <h5>Semaine 3 :</h5>
+                                <ul>
+                                    <li>Phase 8-9 : Controllers + Assets</li>
+                                    <li>Phase 10 : Admin</li>
+                                    <li>Extension aux 4 sites</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-3">
+                                <h5>Semaine 4 :</h5>
+                                <ul>
+                                    <li>Phase 11-12 : Deploy + Tests</li>
+                                    <li>Optimisations finales</li>
+                                    <li>Documentation complète</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="alert alert-warning mt-3">
+                            <strong>Durée totale estimée :</strong> 3-4 semaines pour un développeur junior avec cette roadmap détaillée
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

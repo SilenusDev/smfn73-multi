@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap Multisite Symfony 7.3 - Personnalisée</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .phase-card {
+            border-left: 4px solid #0d6efd;
+            margin-bottom: 2rem;
+        }
+        .step-item {
+            border-left: 2px solid #6c757d;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        .priority-high { border-left-color: #dc3545; }
+        .priority-medium { border-left-color: #ffc107; }
+        .priority-low { border-left-color: #198754; }
+        .advice-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-dark text-light">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-5">
+                    <span class="badge bg-primary fs-2">Roadmap Multisite Symfony 7.3</span>
+                    <br><small class="text-muted">Architecture Simplifiée - 2 sites + évolutif</small>
+                </h1>
+            </div>
+        </div>
+
+        <!-- Mes conseils d'expert -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="advice-box">
+                    <h3><i class="bi bi-lightbulb"></i> Mes Conseils d'Expert pour votre Projet</h3>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h5>✅ Excellentes Décisions :</h5>
+                            <ul class="mb-0">
+                                <li><strong>Bases séparées :</strong> Parfait pour l'isolation et la sécurité</li>
+                                <li><strong>Pas de communication inter-sites :</strong> Architecture plus simple</li>
+                                <li><strong>Un seul serveur :</strong> Facilite le déploiement et la maintenance</li>
+                                <li><strong>Blog similaire :</strong> Code réutilisable, maintenance facilitée</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>💡 Recommandation Admin :</h5>
+                            <p><strong>Solution Hybride Recommandée :</strong></p>
+                            <ul class="mb-0">
+                                <li>1 compte admin par site (plus simple)</li>
+                                <li>Même email/mot de passe si souhaité</li>
+                                <li>Interface d'admin commune (gain de temps)</li>
+                                <li>Possibilité d'évolution vers admin unique plus tard</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dernières questions -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card bg-warning text-dark">
+                    <div class="card-header">
+                        <h3><i class="bi bi-question-circle"></i> Dernières Questions pour Finaliser</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Configuration Domaines :</h5>
+                                <ul>
+                                    <li>Avez-vous déjà vos noms de domaine ?</li>
+                                    <li>Souhaitez-vous tester en local d'abord avec <code>silenus.local</code> et <code>insidiome.local</code> ?</li>
+                                    <li>Les sites auront-ils des sous-domaines ou domaines différents ?</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Fonctionnalités Spécifiques :</h5>
+                                <ul>
+                                    <li>Quel type de fonctionnalités spécifiques par site (e-commerce, galerie, booking) ?</li>
+                                    <li>Combien d'utilisateurs estimés par site ?</li>
+                                    <li>Besoin de multilingue ?</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Architecture Recommandée -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card bg-info text-dark">
+                    <div class="card-header">
+                        <h3>🏗️ Architecture Finale Recommandée</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h5>Structure Projet :</h5>
+                                <div class="bg-dark text-light p-3 rounded">
+                                    <code>
+/multisite-symfony/<br>
+├── /src/<br>
+│   ├── /Entity/Common/<br>
+│   ├── /Entity/Silenus/<br>
+│   ├── /Entity/Insidiome/<br>
+│   ├── /Controller/Common/<br>
+│   └── /Service/<br>
+├── /templates/<br>
+│   ├── /common/<br>
+│   ├── /silenus/<br>
+│   └── /insidiome/<br>
+├── /assets/<br>
+│   ├── /common/<br>
+│   ├── /silenus/<br>
+│   └── /insidiome/<br>
+└── /config/<br>
+    ├── sites/<br>
+    └── packages/
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Bases de Données :</h5>
+                                <ul>
+                                    <li><code>silenus_db</code></li>
+                                    <li><code>insidiome_db</code></li>
+                                    <li><code>dagda_db</code></li>
+                                    <li>Tables blog communes dans chaque base</li>
+                                    <li>Tables spécifiques par site</li>
+                                </ul>
+                                
+                                <h5>Domaines :</h5>
+                                <ul>
+                                    <li>Local : <code>silenus.local</code></li>
+                                    <li>Local : <code>insidiome.local</code></li>
+                                    <li>Prod : vos vrais domaines</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Avantages Architecture Complète :</h5>
+                                <ul>
+                                    <li>✅ Isolation complète des données</li>
+                                    <li>✅ Sécurité maximale</li>
+                                    <li>✅ Mailer OAuth2 par site</li>
+                                    <li>✅ Facilité d'ajout de nouveaux sites</li>
+                                    <li>✅ Maintenance simplifiée</li>
+                                    <li>✅ Code blog réutilisable</li>
+                                    <li>✅ SCSS modulaire</li>
+                                    <li>✅ Admin interface commune</li>
+                                    <li>✅ Templates email personnalisés</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 1 - Préparation -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-high">
+                    <div class="card-header bg-primary">
+                        <h2>Phase 1 : Préparation et Configuration de Base</h2>
+                        <small>Durée estimée : 1-2 jours - PRIORITÉ MAXIMALE</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>1.1 - Sauvegarde et préparation</h5>
+                            <div class="alert alert-warning">
+                                <strong>IMPORTANT :</strong> Sauvegardez votre Symfony 7.3 actuel !
+                            </div>
+                            <ul>
+                                <li>Faire une copie complète de votre projet actuel</li>
+                                <li>Commit Git de l'état actuel</li>
+                                <li>Créer une branche <code>multisite-dev</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>1.2 - Configuration des domaines locaux</h5>
+                            <p><strong>Fichiers à modifier :</strong> <code>/etc/hosts</code> (Linux/Mac) ou <code>C:\Windows\System32\drivers\etc\hosts</code></p>
+                            <div class="bg-dark text-light p-2 rounded">
+                                <code>
+127.0.0.1    silenus.local<br>
+127.0.0.1    insidiome.local
+                                </code>
+                            </div>
+                            <ul>
+                                <li>Configurer Apache/Nginx pour les VirtualHosts</li>
+                                <li>Tester l'accès aux deux domaines</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>1.3 - Restructuration des dossiers</h5>
+                            <p><strong>Symfony Features :</strong> PSR-4 Autoloading, Namespaces</p>
+                            <ul>
+                                <li>Créer la nouvelle structure de dossiers</li>
+                                <li>Modifier <code>composer.json</code> pour les nouveaux namespaces</li>
+                                <li>Organiser les entités existantes</li>
+                                <li>Créer les dossiers templates et assets par site</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 2 - Détection de Site -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-high">
+                    <div class="card-header bg-success">
+                        <h2>Phase 2 : Système de Détection de Site</h2>
+                        <small>Durée estimée : 1 jour - FONDAMENTAL</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>2.1 - Service SiteResolver</h5>
+                            <p><strong>Symfony Features :</strong> <code>Service Container</code>, <code>RequestStack</code></p>
+                            <div class="alert alert-info">
+                                <strong>Objectif :</strong> Détecter automatiquement quel site est appelé basé sur le domaine
+                            </div>
+                            <ul>
+                                <li>Créer le service <code>App\Service\SiteResolver</code></li>
+                                <li>Méthode <code>getCurrentSite()</code> basée sur <code>$_SERVER['HTTP_HOST']</code></li>
+                                <li>Configuration des domaines dans <code>parameters.yaml</code></li>
+                                <li>Gestion des cas d'erreur (domaine inconnu)</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>2.2 - EventSubscriber pour l'initialisation</h5>
+                            <p><strong>Symfony Features :</strong> <code>EventSubscriber</code>, <code>kernel.request</code></p>
+                            <ul>
+                                <li>Créer <code>SiteInitializerSubscriber</code></li>
+                                <li>Écouter l'événement <code>kernel.request</code></li>
+                                <li>Définir le contexte site global</li>
+                                <li>Configurer l'environnement par site</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 3 - Bases de Données -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-high">
+                    <div class="card-header bg-warning text-dark">
+                        <h2>Phase 3 : Configuration Multi-Bases MariaDB</h2>
+                        <small>Durée estimée : 2 jours - CRITIQUE</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>3.1 - Création des bases de données</h5>
+                            <div class="bg-dark text-light p-2 rounded mb-3">
+                                <code>
+CREATE DATABASE silenus_db;<br>
+CREATE DATABASE insidiome_db;<br>
+CREATE DATABASE dagda_db;<br>
+GRANT ALL ON silenus_db.* TO 'your_user'@'localhost';<br>
+GRANT ALL ON insidiome_db.* TO 'your_user'@'localhost';<br>
+GRANT ALL ON dagda_db.* TO 'your_user'@'localhost';
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>3.2 - Configuration Doctrine multiple</h5>
+                            <p><strong>Symfony Features :</strong> <code>Doctrine Bundle</code>, <code>Multiple Connections</code></p>
+                            <div class="alert alert-info">
+                                <strong>Fichier :</strong> <code>config/packages/doctrine.yaml</code>
+                            </div>
+                            <ul>
+                                <li>Configurer une connexion par site</li>
+                                <li>Un Entity Manager par site</li>
+                                <li>Mapping des entités par namespace</li>
+                                <li>Variables d'environnement par site</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>3.3 - Service DatabaseManager</h5>
+                            <p><strong>Objectif :</strong> Simplifier l'accès aux bonnes bases selon le site actif</p>
+                            <ul>
+                                <li>Créer <code>App\Service\DatabaseManager</code></li>
+                                <li>Injection du SiteResolver</li>
+                                <li>Méthode <code>getEntityManager()</code> contextuelle</li>
+                                <li>Gestion des erreurs de connexion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 4 - Entités Blog Communes -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-medium">
+                    <div class="card-header bg-info">
+                        <h2>Phase 4 : Entités Blog (Code Réutilisable)</h2>
+                        <small>Durée estimée : 2-3 jours</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>4.1 - Entités blog communes</h5>
+                            <p><strong>Symfony Features :</strong> <code>Doctrine ORM</code>, <code>Annotations/Attributes</code></p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Entités à créer :</strong>
+                                    <ul>
+                                        <li><code>App\Entity\Common\BlogPost</code></li>
+                                        <li><code>App\Entity\Common\BlogCategory</code></li>
+                                        <li><code>App\Entity\Common\BlogComment</code></li>
+                                        <li><code>App\Entity\Common\User</code></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Relations :</strong>
+                                    <ul>
+                                        <li>Post → Category (ManyToOne)</li>
+                                        <li>Post → Comments (OneToMany)</li>
+                                        <li>User → Posts (OneToMany)</li>
+                                        <li>User → Comments (OneToMany)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>4.2 - Traits réutilisables</h5>
+                            <p><strong>Avantage :</strong> Code commun sans duplication</p>
+                            <ul>
+                                <li><code>TimestampableTrait</code> (created_at, updated_at)</li>
+                                <li><code>SluggableTrait</code> (génération automatique de slug)</li>
+                                <li><code>SeoTrait</code> (meta title, description)</li>
+                                <li><code>PublishableTrait</code> (status, published_at)</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>4.3 - Migrations par site</h5>
+                            <p><strong>Symfony Features :</strong> <code>DoctrineMigrationsBundle</code></p>
+                            <ul>
+                                <li>Générer les migrations pour chaque Entity Manager</li>
+                                <li>Script d'exécution automatique</li>
+                                <li>Validation de la structure</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 5 - Mailer OAuth par Site -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-medium">
+                    <div class="card-header" style="background-color: #e83e8c; color: white;">
+                        <h2>Phase 5 : Système Mailer OAuth par Site</h2>
+                        <small>Durée estimée : 1-2 jours - ARCHITECTURE PROPRE</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>5.1 - Configuration OAuth2 par site</h5>
+                            <p><strong>Symfony Features :</strong> <code>Symfony Mailer</code>, <code>OAuth2 Bundle</code></p>
+                            <div class="alert alert-success">
+                                <strong>Option Retenue :</strong> Un compte Gmail/Outlook avec OAuth2 par site pour une isolation maximale
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Configuration par site :</strong>
+                                    <ul>
+                                        <li><code>.env.silenus</code> : OAUTH_CLIENT_ID_SILENUS</li>
+                                        <li><code>.env.insidiome</code> : OAUTH_CLIENT_ID_INSIDIOME</li>
+                                        <li>Credentials séparés par site</li>
+                                        <li>Domaines d'envoi distincts</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Avantages :</strong>
+                                    <ul>
+                                        <li>✅ Isolation complète des emails</li>
+                                        <li>✅ Identité propre par site</li>
+                                        <li>✅ Sécurité maximale</li>
+                                        <li>✅ Même code, config différente</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>5.2 - Service MailerManager contextuel</h5>
+                            <p><strong>Objectif :</strong> Sélectionner automatiquement le bon compte mail selon le site</p>
+                            <ul>
+                                <li>Créer <code>App\Service\MailerManager</code></li>
+                                <li>Injection du SiteResolver pour détecter le site actif</li>
+                                <li>Configuration dynamique du transport OAuth2</li>
+                                <li>Méthodes <code>sendEmail()</code> et <code>sendTemplate()</code> contextuelles</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>5.3 - Templates email par site</h5>
+                            <p><strong>Symfony Features :</strong> <code>Twig Email Templates</code></p>
+                            <div class="bg-dark text-light p-2 rounded mb-3">
+                                <code>
+/templates/emails/<br>
+├── /common/ (base templates)<br>
+├── /silenus/ (branding silenus)<br>
+└── /insidiome/ (branding insidiome)
+                                </code>
+                            </div>
+                            <ul>
+                                <li>Templates email avec branding par site</li>
+                                <li>Variables contextuelles (logo, couleurs, signature)</li>
+                                <li>Templates communs (contact, inscription) réutilisables</li>
+                                <li>Fallback automatique vers common si template spécifique absent</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>5.4 - Configuration Gmail/Outlook OAuth2</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Gmail API (Recommandé) :</strong>
+                                    <ul>
+                                        <li>Google Cloud Console par site</li>
+                                        <li>Credentials OAuth2 séparés</li>
+                                        <li>Scope : <code>https://mail.google.com/</code></li>
+                                        <li>Refresh tokens par site</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Configuration Symfony :</strong>
+                                    <ul>
+                                        <li><code>config/packages/mailer.yaml</code></li>
+                                        <li>Transport OAuth2 par environnement</li>
+                                        <li>Bundle <code>league/oauth2-google</code></li>
+                                        <li>Gestion automatique des tokens</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 6 - Authentification -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-medium">
+                    <div class="card-header" style="background-color: #6f42c1; color: white;">
+                        <h2>Phase 6 : Système d'Authentification par Site</h2>
+                        <small>Durée estimée : 2-3 jours</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>6.1 - Configuration Security contextuelle</h5>
+                            <p><strong>Symfony Features :</strong> <code>Security Component</code>, <code>Multiple Firewalls</code></p>
+                            <div class="alert alert-info">
+                                <strong>Stratégie :</strong> Un firewall par site avec pattern basé sur le host
+                            </div>
+                            <ul>
+                                <li>Modifier <code>config/packages/security.yaml</code></li>
+                                <li>Firewall <code>silenus_secured</code> et <code>insidiome_secured</code></li>
+                                <li>User providers différents par site</li>
+                                <li>Routes de login/logout spécifiques</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>6.2 - UserProvider personnalisé</h5>
+                            <p><strong>Symfony Features :</strong> <code>UserProviderInterface</code></p>
+                            <ul>
+                                <li>Créer <code>SiteAwareUserProvider</code></li>
+                                <li>Injection du DatabaseManager</li>
+                                <li>Recherche d'utilisateur dans la bonne base</li>
+                                <li>Gestion des rôles par site</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>6.3 - Interface admin commune mais données séparées</h5>
+                            <p><strong>Avantage :</strong> Même code, données isolées</p>
+                            <ul>
+                                <li>Templates admin dans <code>/templates/common/admin/</code></li>
+                                <li>Controllers admin réutilisables</li>
+                                <li>Accès contextuel aux données du site actif</li>
+                                <li>Navigation admin adaptée par site</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 7 - Templates et SCSS -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-medium">
+                    <div class="card-header" style="background-color: #20c997; color: white;">
+                        <h2>Phase 7 : Templates Twig et SCSS Modulaire</h2>
+                        <small>Durée estimée : 3-4 jours</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>7.1 - Organisation Twig hiérarchique</h5>
+                            <p><strong>Symfony Features :</strong> <code>Twig Bundle</code>, <code>Template Inheritance</code></p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Structure recommandée :</strong>
+                                    <div class="bg-dark text-light p-2 rounded">
+                                        <code>
+/templates/<br>
+├── /common/<br>
+│   ├── base.html.twig<br>
+│   ├── /blog/<br>
+│   └── /admin/<br>
+├── /silenus/<br>
+│   ├── base.html.twig<br>
+│   └── /pages/<br>
+└── /insidiome/<br>
+    ├── base.html.twig<br>
+    └── /pages/
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Héritage :</strong>
+                                    <ul>
+                                        <li><code>common/base.html.twig</code> (structure HTML)</li>
+                                        <li><code>silenus/base.html.twig extends common/base</code></li>
+                                        <li>Pages spécifiques étendent le base du site</li>
+                                        <li>Templates blog réutilisent common/blog</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>7.2 - Service TemplateResolver</h5>
+                            <p><strong>Objectif :</strong> Résolution automatique des templates par site</p>
+                            <ul>
+                                <li>Créer <code>App\Service\TemplateResolver</code></li>
+                                <li>Méthode <code>resolve($template)</code> contextuelle</li>
+                                <li>Fallback vers common si template spécifique absent</li>
+                                <li>Integration avec les controllers</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>7.3 - Webpack Encore multisite</h5>
+                            <p><strong>Tools :</strong> <code>Symfony Webpack Encore</code>, <code>SCSS</code></p>
+                            <div class="alert alert-info">
+                                <strong>Configuration :</strong> Entry points séparés par site + assets communs
+                            </div>
+                            <ul>
+                                <li>Modifier <code>webpack.config.js</code></li>
+                                <li>Entry <code>common</code>, <code>silenus</code>, <code>insidiome</code></li>
+                                <li>Variables SCSS communes importées</li>
+                                <li>Build automatique multi-cible</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 8 - Controllers et Routing -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-low">
+                    <div class="card-header bg-secondary">
+                        <h2>Phase 8 : Controllers et Routing Intelligents</h2>
+                        <small>Durée estimée : 2-3 jours</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>8.1 - BaseController contextuel</h5>
+                            <p><strong>Symfony Features :</strong> <code>AbstractController</code>, <code>Service Injection</code></p>
+                            <ul>
+                                <li>Créer <code>App\Controller\BaseController</code></li>
+                                <li>Injection automatique SiteResolver, DatabaseManager</li>
+                                <li>Méthodes utilitaires (<code>getCurrentSite()</code>, <code>getEM()</code>)</li>
+                                <li>Gestion centralisée des erreurs 404</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>8.2 - Controllers Blog réutilisables</h5>
+                            <p><strong>Avantage :</strong> Code une fois, utilisé partout</p>
+                            <ul>
+                                <li><code>BlogController</code> commun</li>
+                                <li><code>AdminController</code> commun</li>
+                                <li>Routes contextuelles par site</li>
+                                <li>Repository patterns pour l'accès aux données</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>8.3 - Routing conditionnel</h5>
+                            <p><strong>Symfony Features :</strong> <code>Route Conditions</code>, <code>Route Requirements</code></p>
+                            <ul>
+                                <li>Routes avec conditions sur le host</li>
+                                <li>Préfixes optionnels par site</li>
+                                <li>Génération d'URLs contextuelles</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 9 - Tests et Optimisation -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-low">
+                    <div class="card-header bg-dark">
+                        <h2>Phase 9 : Tests, Sécurité et Optimisation</h2>
+                        <small>Durée estimée : 2-3 jours</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>9.1 - Tests automatisés</h5>
+                            <p><strong>Symfony Features :</strong> <code>PHPUnit Bridge</code>, <code>WebTestCase</code></p>
+                            <ul>
+                                <li>Tests du SiteResolver et MailerManager</li>
+                                <li>Tests des controllers par site</li>
+                                <li>Tests d'authentification isolée</li>
+                                <li>Tests des templates et emails par site</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>9.2 - Sécurité avancée</h5>
+                            <ul>
+                                <li>Isolation des sessions par site</li>
+                                <li>Headers de sécurité contextuels</li>
+                                <li>Validation CSRF par site</li>
+                                <li>Rate limiting si nécessaire</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>9.3 - Cache et performance</h5>
+                            <p><strong>Symfony Features :</strong> <code>Cache Component</code></p>
+                            <ul>
+                                <li>Cache contextuel par site</li>
+                                <li>Optimisation des requêtes</li>
+                                <li>Compression des assets</li>
+                                <li>Monitoring des performances</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 10 - Déploiement -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card phase-card priority-low">
+                    <div class="card-header" style="background-color: #fd7e14; color: white;">
+                        <h2>Phase 10 : Préparation Déploiement VPS</h2>
+                        <small>Durée estimée : 2-3 jours</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-item">
+                            <h5>10.1 - Configuration production</h5>
+                            <ul>
+                                <li>Fichiers <code>.env.prod</code> par site</li>
+                                <li>Configuration Apache/Nginx VirtualHosts</li>
+                                <li>SSL/TLS par domaine</li>
+                                <li>Variables d'environnement sécurisées</li>
+                                <li>Configuration OAuth2 en production</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>10.2 - Scripts de déploiement</h5>
+                            <ul>
+                                <li>Script de migration des bases</li>
+                                <li>Build automatique des assets</li>
+                                <li>Validation des credentials OAuth2</li>
+                                <li>Tests d'envoi email par site</li>
+                                <li>Déploiement avec downtime minimal</li>
+                                <li>Rollback automatique en cas d'erreur</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-item">
+                            <h5>10.3 - Ajout de nouveaux sites</h5>
+                            <p><strong>Documentation :</strong> Procédure step-by-step</p>
+                            <ul>
+                                <li>Checklist création nouveau site</li>
+                                <li>Templates de configuration (DB + OAuth2)</li>
+                                <li>Scripts d'automatisation complets</li>
+                                <li>Tests de validation email et DB</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
