@@ -15,8 +15,11 @@ class Site
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $site = null;
+    #[ORM\Column(length: 20, unique: true)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $domain = null;
 
     /**
      * @var Collection<int, User>
@@ -34,14 +37,26 @@ class Site
         return $this->id;
     }
 
-    public function getSite(): ?string
+    public function getName(): ?string
     {
-        return $this->site;
+        return $this->name;
     }
 
-    public function setSite(string $site): static
+    public function setName(string $name): static
     {
-        $this->site = $site;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDomain(): ?string
+    {
+        return $this->domain;
+    }
+
+    public function setDomain(?string $domain): static
+    {
+        $this->domain = $domain;
 
         return $this;
     }

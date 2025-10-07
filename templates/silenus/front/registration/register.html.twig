@@ -1,0 +1,54 @@
+{% extends 'silenus/front/base.html.twig' %}
+
+{% block title %}Inscription - Silenus{% endblock %}
+
+{% block body %}
+    <h2 style="color: #667eea; margin-bottom: 20px;">Créer un compte {{ site_name }}</h2>
+
+    <div style="max-width: 500px;">
+        {{ form_start(registrationForm) }}
+            
+            <div style="margin-bottom: 20px;">
+                {{ form_label(registrationForm.email, 'Email', {'label_attr': {'style': 'display: block; margin-bottom: 8px; font-weight: 500; color: #333;'}}) }}
+                {{ form_widget(registrationForm.email, {'attr': {'style': 'width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 5px; font-size: 1rem;'}}) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'style': 'display: block; margin-bottom: 8px; font-weight: 500; color: #333;'}}) }}
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'style': 'width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 5px; font-size: 1rem;'}}) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+                <small style="color: #666; display: block; margin-top: 5px;">
+                    Minimum 6 caractères
+                </small>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'style': 'margin-right: 8px;'}}) }}
+                    <span>J'accepte les conditions d'utilisation</span>
+                </label>
+                {{ form_errors(registrationForm.agreeTerms) }}
+            </div>
+
+            <button 
+                type="submit" 
+                style="width: 100%; background: #667eea; color: white; padding: 14px; border: none; border-radius: 5px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.3s;"
+                onmouseover="this.style.background='#5568d3'"
+                onmouseout="this.style.background='#667eea'"
+            >
+                Créer mon compte
+            </button>
+
+        {{ form_end(registrationForm) }}
+
+        <div style="margin-top: 20px; text-align: center;">
+            <p style="color: #666;">
+                Déjà un compte ? 
+                <a href="{{ path('slns_login') }}" style="color: #667eea; text-decoration: none; font-weight: 500;">
+                    Se connecter
+                </a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

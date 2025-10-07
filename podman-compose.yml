@@ -1,16 +1,16 @@
 version: '3.8'
 
 services:
-  # Apache + PHP
+  # Apache + PHP (utilise l'image buildée localement ou build si nécessaire)
   web:
     build:
-      context: ./docker/php
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.web
     container_name: symfony_web
     ports:
       - "${WEB_PORT:-8080}:80"
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www/html:z
     environment:
       - DATABASE_SLNS_URL=${DATABASE_SLNS_URL}
       - DATABASE_NSDM_URL=${DATABASE_NSDM_URL}
@@ -23,7 +23,7 @@ services:
 
   # MariaDB avec 2 bases de données
   db:
-    image: mariadb:10.11
+    image: docker.io/library/mariadb:10.11
     container_name: symfony_db
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
@@ -39,11 +39,11 @@ services:
 
   # Node pour les assets
   node:
-    image: node:20-alpine
+    image: docker.io/library/node:20-alpine
     container_name: symfony_node
     working_dir: /app
     volumes:
-      - ./:/app
+      - ./:/app:z
     command: sh -c "yarn install && yarn watch"
     ports:
       - "${NODE_PORT:-5173}:5173"
@@ -52,7 +52,7 @@ services:
 
   # phpMyAdmin
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: docker.io/phpmyadmin/phpmyadmin
     container_name: symfony_phpmyadmin
     environment:
       PMA_HOST: db

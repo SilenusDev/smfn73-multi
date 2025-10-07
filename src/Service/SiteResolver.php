@@ -35,14 +35,29 @@ class SiteResolver
             throw new \RuntimeException('Pas de requête disponible');
         }
 
-        $host = $request->getHost();
+        // Détection par path (prioritaire pour localhost)
+        $path = $request->getPathInfo();
         
-        if (!isset(self::SITE_MAPPING[$host])) {
-            throw new \RuntimeException("Site inconnu pour le domaine : {$host}");
+        if (str_starts_with($path, '/slns')) {
+            $this->currentSite = 'silenus';
+            return $this->currentSite;
+        }
+        
+        if (str_starts_with($path, '/ndsm')) {
+            $this->currentSite = 'insidiome';
+            return $this->currentSite;
         }
 
-        $this->currentSite = self::SITE_MAPPING[$host];
+        // Détection par domaine (pour production)
+        $host = $request->getHost();
         
+        if (isset(self::SITE_MAPPING[$host])) {
+            $this->currentSite = self::SITE_MAPPING[$host];
+            return $this->currentSite;
+        }
+
+        // Par défaut, silenus
+        $this->currentSite = 'silenus';
         return $this->currentSite;
     }
 

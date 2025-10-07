@@ -1,0 +1,36 @@
+{% extends 'insidiome/front/base.html.twig' %}
+
+{% block title %}À propos - Insidiome{% endblock %}
+
+{% block body %}
+    <h2 style="color: #f5576c; margin-bottom: 20px;">À propos de {{ site_name }}</h2>
+    
+    <div style="line-height: 1.8;">
+        <p style="font-size: 1.1rem; margin-bottom: 20px;">
+            Insidiome est une plateforme moderne construite avec Symfony 7.3 et une architecture multisite.
+        </p>
+
+        <div style="background: #fff0f3; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #f5576c; margin-bottom: 15px;">🏗️ Architecture</h3>
+            <ul style="line-height: 2;">
+                <li><strong>Framework:</strong> Symfony 7.3</li>
+                <li><strong>Base de données:</strong> MariaDB 10.11 (nsdm_db)</li>
+                <li><strong>Isolation:</strong> Base de données dédiée</li>
+                <li><strong>Détection:</strong> Automatique par domaine</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <h3 style="color: #f5576c; margin-bottom: 15px;">🔐 Sécurité</h3>
+            <p>
+                Chaque site dispose de sa propre base de données, garantissant une isolation totale des données.
+                Les utilisateurs d'Insidiome ne peuvent pas accéder aux données de Silenus et vice-versa.
+            </p>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <h3 style="color: #f5576c; margin-bottom: 15px;">📞 Contact</h3>
+            <p>Pour toute question, n'hésitez pas à nous contacter.</p>
+        </div>
+    </div>
+{% endblock %}
