@@ -128,6 +128,8 @@
 - [x] Fichier .htaccess créé pour Apache rewrite
 - [x] Correction SiteResolver (détection par path ET domaine)
 - [x] Tests fonctionnels: /slns/ et /ndsm/ accessibles
+- [x] **Tests réussis: Inscription et connexion opérationnelles sur les 2 sites**
+- [x] **Validation: Isolation des users confirmée**
 
 ---
 
@@ -146,12 +148,12 @@
 - **Inscription/Connexion/Déconnexion opérationnelles**
 
 ### ⏳ En Attente
-- Tests de l'inscription/connexion avec création de users
-- Création des entités métier (BlogPost, Category, Comment, etc.)
+- Création des entités métier (BlogPost, Category, Comment, Page)
+- Controllers CRUD pour les entités métier
 - Tests unitaires et fonctionnels
 - Configuration Mailer (optionnel)
 - Assets Webpack par site (amélioration design)
 - Interface d'administration
 
 ---
-*Dernière mise à jour : 2025-10-07 13:22*
+*Dernière mise à jour : 2025-10-07 13:43*

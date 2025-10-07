@@ -2,6 +2,19 @@
 
 Architecture multisite avec 2 sites (Silenus & Insidiome) et 2 bases de données séparées.
 
+## 🔗 Liens Rapides
+
+### Silenus (Thème Violet 🌙)
+- [Accueil](http://localhost:8080/slns/) • [Inscription](http://localhost:8080/slns/register) • [Connexion](http://localhost:8080/slns/login)
+
+### Insidiome (Thème Rose 🔥)
+- [Accueil](http://localhost:8080/ndsm/) • [Inscription](http://localhost:8080/ndsm/register) • [Connexion](http://localhost:8080/ndsm/login)
+
+### Administration
+- [phpMyAdmin](http://localhost:8081) (symfony / symfony)
+
+---
+
 ## 📋 Table des matières
 
 - [Démarrage rapide](#démarrage-rapide)
@@ -33,9 +46,27 @@ docker-compose exec web php bin/console app:init-sites
 
 ### Accès aux services
 
-- **Application Symfony**: http://localhost:8080
-- **phpMyAdmin**: http://localhost:8081 (user: `symfony`, pass: `symfony`)
-- **Base de données**: localhost:3306
+#### 🌐 Sites Web
+- **Silenus (Accueil)**: http://localhost:8080/slns/
+- **Silenus (Inscription)**: http://localhost:8080/slns/register
+- **Silenus (Connexion)**: http://localhost:8080/slns/login
+- **Silenus (À propos)**: http://localhost:8080/slns/about
+
+- **Insidiome (Accueil)**: http://localhost:8080/ndsm/
+- **Insidiome (Inscription)**: http://localhost:8080/ndsm/register
+- **Insidiome (Connexion)**: http://localhost:8080/ndsm/login
+- **Insidiome (À propos)**: http://localhost:8080/ndsm/about
+
+#### 🗄️ Base de données
+- **phpMyAdmin**: http://localhost:8081
+  - User: `symfony`
+  - Password: `symfony`
+  - Base Silenus: `slns_db`
+  - Base Insidiome: `nsdm_db`
+
+#### 🔌 Accès direct
+- **MariaDB**: localhost:3306
+- **Vite/Node (assets)**: localhost:5173
 
 ---
 
@@ -210,6 +241,44 @@ NODE_PORT=5173
 ├── /docs/                # Documentation
 └── docker-compose.yml    # Configuration Docker
 ```
+
+---
+
+## 🧪 Tests Rapides
+
+### Vérifier que tout fonctionne
+
+```bash
+# 1. Vérifier les services
+docker-compose ps
+
+# 2. Vérifier les routes
+docker-compose exec web php bin/console debug:router | grep -E "(slns|ndsm)"
+
+# 3. Vérifier les bases de données
+docker-compose exec db mysql -usymfony -psymfony -e "SHOW DATABASES;"
+
+# 4. Voir les tables de chaque base
+docker-compose exec db mysql -usymfony -psymfony slns_db -e "SHOW TABLES;"
+docker-compose exec db mysql -usymfony -psymfony nsdm_db -e "SHOW TABLES;"
+```
+
+### Test d'inscription
+
+1. **Silenus** : http://localhost:8080/slns/register
+   - Créer un compte (ex: `test@silenus.com`)
+   - Se connecter
+
+2. **Insidiome** : http://localhost:8080/ndsm/register
+   - Créer un compte (ex: `test@insidiome.com`)
+   - Se connecter
+
+3. **Vérifier l'isolation** :
+   ```bash
+   # Les users doivent être dans des bases séparées
+   docker-compose exec db mysql -usymfony -psymfony slns_db -e "SELECT id, email FROM user;"
+   docker-compose exec db mysql -usymfony -psymfony nsdm_db -e "SELECT id, email FROM user;"
+   ```
 
 ---
 
