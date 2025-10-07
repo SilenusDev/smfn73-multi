@@ -7,22 +7,18 @@
 ```
 /multisite-symfony/
 ├── /src/
-│   ├── /Entity/Common/
-│   ├── /Entity/Silenus/
-│   ├── /Entity/Insidiome/
-│   ├── /Entity/Dagda/
-│   ├── /Controller/Common/
+│   ├── /Entity/  #common
+│   ├── /Controller/Insidiome/
+│   ├── /Controller/Dagda/
 │   └── /Service/
 ├── /templates/
 │   ├── /common/
 │   ├── /silenus/
-│   ├── /insidiome/
-│   └── /dagda/
+│   └── /insidiome/
 ├── /assets/
 │   ├── /common/
 │   ├── /silenus/
-│   ├── /insidiome/
-│   └── /dagda/
+│   └── /insidiome/
 └── /config/
     ├── sites/
     └── packages/

@@ -9,4 +9,6 @@
 ###< symfony/framework-bundle ###
 
 ###> symfony/webpack-encore-bundle ###
-/node_modules/# Ce fichier a été supprimé - la configuration .gitignore est maintenant centralisée dans /.gitignore à la racine du projet
+/node_modules/
+/public/build/
+###< symfony/webpack-encore-bundle ###
