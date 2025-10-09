@@ -1,0 +1,118 @@
+{% extends 'silenus/front/base.html.twig' %}
+
+{% block lang %}fr{% endblock %}
+
+{# SEO Meta Tags #}
+{% block title %}Accueil - Silenus{% endblock %}
+{% block description %}Bienvenue sur Silenus, votre plateforme dédiée construite avec Symfony 7.3. Découvrez nos fonctionnalités et créez votre compte.{% endblock %}
+{% block keywords %}silenus, accueil, plateforme, symfony, authentification, multisite{% endblock %}
+
+{# Canonical URL #}
+{% block canonical %}{{ app.request.uri }}{% endblock %}
+
+{# Open Graph #}
+{% block og_title %}Accueil - Silenus{% endblock %}
+{% block og_description %}Bienvenue sur Silenus, votre plateforme dédiée construite avec Symfony 7.3.{% endblock %}
+{% block og_link %}{{ app.request.uri }}{% endblock %}
+{% block og_image %}{{ app.request.getSchemeAndHttpHost() }}/build/img/gen/og-default.jpg{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_locale %}fr_FR{% endblock %}
+
+{# Robots #}
+{% block robots %}index,follow{% endblock %}
+
+{% block body %}
+    <!-- Hero Section -->
+    <div class="text-center mb-12 animate-fade-in">
+        <h2 class="text-5xl font-bold mb-4">
+            <span class="bg-gradient-to-r from-slns-primary-400 to-slns-primary-600 bg-clip-text text-transparent">
+                {{ message }}
+            </span>
+        </h2>
+        <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Bienvenue sur <strong class="text-slns-primary-400">{{ site_name }}</strong>, votre plateforme dédiée construite avec Symfony 7.3
+        </p>
+    </div>
+
+    {% if app.user %}
+        <!-- User Welcome Card -->
+        <div class="glass-primary rounded-2xl p-8 mb-8 animate-slide-up">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-slns-primary-400 to-slns-primary-600 flex items-center justify-center">
+                    <i data-lucide="user-circle" class="w-10 h-10 text-white"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-100">
+                        Bonjour {{ app.user.email }} !
+                    </h3>
+                    <p class="text-gray-400">Vous êtes connecté sur votre espace Silenus</p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <!-- CTA Card -->
+        <div class="glass-primary rounded-2xl p-8 mb-8 text-center animate-slide-up">
+            <div class="mb-6">
+                <div class="inline-block p-4 bg-slns-primary-500/20 rounded-full mb-4">
+                    <i data-lucide="zap" class="w-12 h-12 text-slns-primary-400"></i>
+                </div>
+            </div>
+            <h3 class="text-3xl font-bold text-gray-100 mb-4 flex items-center justify-center gap-3">
+                <i data-lucide="rocket" class="w-8 h-8 text-slns-primary-400"></i>
+                Commencez maintenant
+            </h3>
+            <p class="text-gray-300 mb-6 text-lg">
+                Créez votre compte pour accéder à toutes les fonctionnalités de la plateforme
+            </p>
+            <a href="{{ path('slns_register') }}" class="btn-primary inline-block">
+                Créer un compte gratuitement
+            </a>
+        </div>
+    {% endif %}
+
+    <!-- Features Grid -->
+    <div class="mt-12">
+        <h3 class="text-3xl font-bold text-center mb-8 flex items-center justify-center gap-3">
+            <i data-lucide="sparkles" class="w-8 h-8 text-slns-primary-400"></i>
+            Fonctionnalités
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Feature 1 -->
+            <div class="glass-hover rounded-xl p-6 text-center group">
+                <div class="mb-4 flex justify-center group-hover:scale-110 transition-transform">
+                    <i data-lucide="lock" class="w-12 h-12 text-slns-primary-400"></i>
+                </div>
+                <h4 class="font-bold text-gray-100 mb-2">Authentification sécurisée</h4>
+                <p class="text-gray-400 text-sm">Système de connexion robuste et sécurisé</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="glass-hover rounded-xl p-6 text-center group">
+                <div class="mb-4 flex justify-center group-hover:scale-110 transition-transform">
+                    <i data-lucide="database" class="w-12 h-12 text-slns-primary-400"></i>
+                </div>
+                <h4 class="font-bold text-gray-100 mb-2">Base de données isolée</h4>
+                <p class="text-gray-400 text-sm">Vos données sont totalement isolées</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="glass-hover rounded-xl p-6 text-center group">
+                <div class="mb-4 flex justify-center group-hover:scale-110 transition-transform">
+                    <i data-lucide="palette" class="w-12 h-12 text-slns-primary-400"></i>
+                </div>
+                <h4 class="font-bold text-gray-100 mb-2">Interface personnalisée</h4>
+                <p class="text-gray-400 text-sm">Design moderne avec glassmorphisme</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="glass-hover rounded-xl p-6 text-center group">
+                <div class="mb-4 flex justify-center group-hover:scale-110 transition-transform">
+                    <i data-lucide="layers" class="w-12 h-12 text-slns-primary-400"></i>
+                </div>
+                <h4 class="font-bold text-gray-100 mb-2">Architecture multisite</h4>
+                <p class="text-gray-400 text-sm">Symfony 7.3 avec Tailwind CSS</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

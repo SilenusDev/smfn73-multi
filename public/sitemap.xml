@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    
+    <!-- ============================================ -->
+    <!-- INSIDIOME (insidiome.com) -->
+    <!-- ============================================ -->
+    
+    <!-- Page d'accueil Insidiome -->
+    <url>
+        <loc>https://www.insidiome.com/nsdm/</loc>
+        <lastmod>2025-10-09</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- À propos Insidiome -->
+    <url>
+        <loc>https://www.insidiome.com/nsdm/about</loc>
+        <lastmod>2025-10-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Inscription Insidiome (noindex mais dans sitemap pour référence) -->
+    <url>
+        <loc>https://www.insidiome.com/nsdm/register</loc>
+        <lastmod>2025-10-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <!-- Connexion Insidiome (noindex mais dans sitemap pour référence) -->
+    <url>
+        <loc>https://www.insidiome.com/nsdm/login</loc>
+        <lastmod>2025-10-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <!-- ============================================ -->
+    <!-- SILENUS (silenus.fr) -->
+    <!-- ============================================ -->
+    
+    <!-- Page d'accueil Silenus -->
+    <url>
+        <loc>https://www.silenus.fr/slns/</loc>
+        <lastmod>2025-10-09</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- À propos Silenus -->
+    <url>
+        <loc>https://www.silenus.fr/slns/about</loc>
+        <lastmod>2025-10-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Inscription Silenus (noindex mais dans sitemap pour référence) -->
+    <url>
+        <loc>https://www.silenus.fr/slns/register</loc>
+        <lastmod>2025-10-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <!-- Connexion Silenus (noindex mais dans sitemap pour référence) -->
+    <url>
+        <loc>https://www.silenus.fr/slns/login</loc>
+        <lastmod>2025-10-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+</urlset>

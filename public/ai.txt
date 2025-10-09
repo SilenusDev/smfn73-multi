@@ -1,0 +1,101 @@
+# ai.txt - Directives pour les systèmes d'Intelligence Artificielle
+# Spécification: https://site.spawning.ai/ai-txt
+
+# ============================================
+# PERMISSIONS GLOBALES
+# ============================================
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /_profiler/
+Disallow: /_wdt/
+
+# ============================================
+# DÉCLARATION DU CONTENU
+# ============================================
+# Type de contenu
+Content-Type: human-generated
+
+# Permissions d'utilisation
+Training: allowed
+Summarization: allowed
+Analysis: allowed
+Indexing: allowed
+
+# ============================================
+# PERMISSIONS SPÉCIFIQUES PAR IA
+# ============================================
+
+# OpenAI (ChatGPT, GPT-4)
+User-agent: GPTBot
+Training: allowed
+Summarization: allowed
+Allow: /
+
+# Anthropic (Claude)
+User-agent: anthropic-ai
+Training: allowed
+Summarization: allowed
+Allow: /
+
+# Google AI (Bard, Gemini)
+User-agent: Google-Extended
+Training: allowed
+Summarization: allowed
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Training: allowed
+Summarization: allowed
+Allow: /
+
+# Common Crawl
+User-agent: CCBot
+Training: allowed
+Summarization: allowed
+Allow: /
+
+# ============================================
+# MÉTADONNÉES DU SITE
+# ============================================
+Site-Name: INSIDIOME / Silenus
+Site-Type: web-application
+Language: fr-FR
+Owner: Him of INSIDIOME / Team Silenus
+Contact: contact@insidiome.com
+License: proprietary
+
+# ============================================
+# RESTRICTIONS DE CONTENU
+# ============================================
+# Contenu protégé par droits d'auteur
+Copyright: All rights reserved
+Attribution-Required: yes
+
+# Données personnelles
+Personal-Data: protected
+GDPR-Compliant: yes
+
+# ============================================
+# PRÉFÉRENCES D'UTILISATION
+# ============================================
+# Comment les IA peuvent utiliser le contenu
+Use-Cases:
+  - information-retrieval: allowed
+  - question-answering: allowed
+  - content-generation: allowed-with-attribution
+  - training-data: allowed
+  - commercial-use: contact-required
+
+# ============================================
+# NOTES ADDITIONNELLES
+# ============================================
+# Ce fichier définit comment les systèmes d'IA peuvent
+# interagir avec le contenu de ce site web.
+# 
+# Pour toute question ou demande spécifique,
+# contactez: contact@insidiome.com
+#
+# Dernière mise à jour: 2025-10-09

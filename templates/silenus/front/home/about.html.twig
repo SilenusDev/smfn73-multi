@@ -1,0 +1,106 @@
+{% extends 'silenus/front/base.html.twig' %}
+
+{% block lang %}fr{% endblock %}
+
+{# SEO Meta Tags #}
+{% block title %}À propos - Silenus{% endblock %}
+{% block description %}Découvrez Silenus, une plateforme moderne construite avec Symfony 7.3 et une architecture multisite avec isolation totale des données.{% endblock %}
+{% block keywords %}silenus, à propos, architecture, symfony, base de données, sécurité, multisite{% endblock %}
+
+{# Canonical URL #}
+{% block canonical %}{{ app.request.uri }}{% endblock %}
+
+{# Open Graph #}
+{% block og_title %}À propos - Silenus{% endblock %}
+{% block og_description %}Découvrez Silenus, une plateforme moderne construite avec Symfony 7.3 et une architecture multisite.{% endblock %}
+{% block og_link %}{{ app.request.uri }}{% endblock %}
+{% block og_image %}{{ app.request.getSchemeAndHttpHost() }}/build/img/gen/og-default.jpg{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_locale %}fr_FR{% endblock %}
+
+{# Robots #}
+{% block robots %}index,follow{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <div class="text-center mb-12 animate-fade-in">
+        <h2 class="text-5xl font-bold mb-4">
+            <span class="bg-gradient-to-r from-slns-primary-400 to-slns-primary-600 bg-clip-text text-transparent">
+                À propos de {{ site_name }}
+            </span>
+        </h2>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+            Une plateforme moderne construite avec Symfony 7.3 et une architecture multisite innovante
+        </p>
+    </div>
+
+    <!-- Architecture Card -->
+    <div class="glass-primary rounded-2xl p-8 mb-8 animate-slide-up">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="p-3 bg-slns-primary-500/20 rounded-lg">
+                <i data-lucide="building-2" class="w-8 h-8 text-slns-primary-400"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-gray-100">Architecture</h3>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass rounded-lg p-4">
+                <div class="flex items-center gap-3 mb-2">
+                    <i data-lucide="zap" class="w-6 h-6 text-slns-primary-400"></i>
+                    <strong class="text-gray-100">Framework</strong>
+                </div>
+                <p class="text-gray-400 ml-11">Symfony 7.3</p>
+            </div>
+
+            <div class="glass rounded-lg p-4">
+                <div class="flex items-center gap-3 mb-2">
+                    <i data-lucide="database" class="w-6 h-6 text-slns-primary-400"></i>
+                    <strong class="text-gray-100">Base de données</strong>
+                </div>
+                <p class="text-gray-400 ml-11">MariaDB 10.11 (slns_db)</p>
+            </div>
+
+            <div class="glass rounded-lg p-4">
+                <div class="flex items-center gap-3 mb-2">
+                    <i data-lucide="lock" class="w-6 h-6 text-slns-primary-400"></i>
+                    <strong class="text-gray-100">Isolation</strong>
+                </div>
+                <p class="text-gray-400 ml-11">Base de données dédiée</p>
+            </div>
+
+            <div class="glass rounded-lg p-4">
+                <div class="flex items-center gap-3 mb-2">
+                    <i data-lucide="target" class="w-6 h-6 text-slns-primary-400"></i>
+                    <strong class="text-gray-100">Détection</strong>
+                </div>
+                <p class="text-gray-400 ml-11">Automatique par domaine</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Card -->
+    <div class="glass-lg rounded-2xl p-8 mb-8">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="p-3 bg-green-500/20 rounded-lg">
+                <i data-lucide="shield" class="w-8 h-8 text-green-400"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-gray-100">Sécurité</h3>
+        </div>
+        
+        <p class="text-gray-300 text-lg leading-relaxed">
+            Chaque site dispose de sa propre base de données, garantissant une <strong class="text-slns-primary-400">isolation totale des données</strong>.
+            Les utilisateurs de Silenus ne peuvent pas accéder aux données d'Insidiome et vice-versa.
+        </p>
+    </div>
+
+    <!-- Contact Card -->
+    <div class="glass-hover rounded-2xl p-8 text-center">
+        <div class="inline-block p-4 bg-slns-primary-500/20 rounded-full mb-4">
+            <i data-lucide="mail" class="w-12 h-12 text-slns-primary-400"></i>
+        </div>
+        <h3 class="text-3xl font-bold text-gray-100 mb-4">Contact</h3>
+        <p class="text-gray-300 text-lg">
+            Pour toute question, n'hésitez pas à nous contacter.
+        </p>
+    </div>
+{% endblock %}

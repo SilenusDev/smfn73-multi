@@ -1,0 +1,95 @@
+{% extends 'insidiome/front/base.html.twig' %}
+
+{% block lang %}fr{% endblock %}
+
+{# SEO Meta Tags #}
+{% block title %}Inscription - INSIDIOME{% endblock %}
+{% block description %}Créez votre compte INSIDIOME gratuitement et accédez à toutes les fonctionnalités de la plateforme.{% endblock %}
+{% block keywords %}insidiome, inscription, créer compte, register, s'inscrire{% endblock %}
+
+{# Canonical URL #}
+{% block canonical %}{{ app.request.uri }}{% endblock %}
+
+{# Open Graph #}
+{% block og_title %}Inscription - INSIDIOME{% endblock %}
+{% block og_description %}Créez votre compte INSIDIOME gratuitement et accédez à toutes les fonctionnalités de la plateforme.{% endblock %}
+{% block og_link %}{{ app.request.uri }}{% endblock %}
+{% block og_image %}{{ app.request.getSchemeAndHttpHost() }}/build/img/gen/og-default.jpg{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_locale %}fr_FR{% endblock %}
+
+{# Robots - Ne pas indexer les pages d'inscription #}
+{% block robots %}noindex,follow{% endblock %}
+
+{% block body %}
+    <div class="max-w-md mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8 animate-fade-in">
+            <div class="inline-block p-4 bg-nsdm-primary-500/20 rounded-full mb-4">
+                <i data-lucide="user-plus" class="w-12 h-12 text-nsdm-primary-400"></i>
+            </div>
+            <h2 class="text-4xl font-bold mb-2">
+                <span class="bg-gradient-to-r from-nsdm-primary-400 to-nsdm-primary-600 bg-clip-text text-transparent">
+                    Inscription
+                </span>
+            </h2>
+            <p class="text-gray-400">Créez votre compte {{ site_name }}</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="glass-lg rounded-2xl p-8 animate-slide-up">
+            {{ form_start(registrationForm, {'attr': {'class': 'space-y-6'}}) }}
+                
+                <!-- Email Field -->
+                <div>
+                    {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'block text-gray-300 font-medium mb-2'}}) }}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'glass-input w-full text-gray-100', 'placeholder': 'vous@exemple.com'}}) }}
+                    <div class="text-red-400 text-sm mt-1">
+                        {{ form_errors(registrationForm.email) }}
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'block text-gray-300 font-medium mb-2'}}) }}
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'glass-input w-full text-gray-100', 'placeholder': '••••••••'}}) }}
+                    <div class="text-red-400 text-sm mt-1">
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
+                    <small class="text-gray-500 text-sm block mt-2">
+                        Minimum 6 caractères
+                    </small>
+                </div>
+
+                <!-- Terms Checkbox -->
+                <div>
+                    <label class="flex items-start gap-3 cursor-pointer group">
+                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w-5 h-5 mt-0.5 rounded border-white/20 bg-white/5 text-nsdm-primary-500 focus:ring-nsdm-primary-500 focus:ring-offset-0 cursor-pointer'}}) }}
+                        <span class="text-gray-300 group-hover:text-gray-100 transition-colors">
+                            J'accepte les conditions d'utilisation
+                        </span>
+                    </label>
+                    <div class="text-red-400 text-sm mt-1 ml-8">
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-primary w-full">
+                    Créer mon compte
+                </button>
+
+            {{ form_end(registrationForm) }}
+
+            <!-- Login Link -->
+            <div class="text-center pt-6 border-t border-white/10">
+                <p class="text-gray-400">
+                    Déjà un compte ? 
+                    <a href="{{ path('nsdm_login') }}" class="text-nsdm-primary-400 hover:text-nsdm-primary-300 font-semibold transition-colors">
+                        Se connecter
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["assets/*"]
+    }
+  },
+  "include": [
+    "assets/**/*.ts",
+    "assets/**/*.tsx",
+    "assets/types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "public",
+    "var",
+    "vendor"
+  ]
+}
