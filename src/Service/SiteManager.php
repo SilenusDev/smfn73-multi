@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Site;
+use App\Enum\SiteEnum;
 
 /**
  * Gère l'entité Site locale de chaque base de données
@@ -41,17 +42,15 @@ class SiteManager
      */
     private function createSiteEntity(string $siteName): Site
     {
+        $siteEnum = SiteEnum::fromName($siteName);
+        
+        if (!$siteEnum) {
+            throw new \InvalidArgumentException("Site inconnu: {$siteName}");
+        }
+        
         $site = new Site();
-        $site->setName($siteName);
-        
-        // Définir le domaine selon le site
-        $domain = match($siteName) {
-            'silenus' => 'silenus.local',
-            'insidiome' => 'insidiome.local',
-            default => 'localhost'
-        };
-        
-        $site->setDomain($domain);
+        $site->setName($siteEnum);
+        $site->setDomain($siteEnum->getDomain());
 
         $this->dbManager->persist($site);
         $this->dbManager->flush();
@@ -78,22 +77,21 @@ class SiteManager
      */
     public function initializeSiteForDatabase(string $siteName): Site
     {
+        $siteEnum = SiteEnum::fromName($siteName);
+        
+        if (!$siteEnum) {
+            throw new \InvalidArgumentException("Site inconnu: {$siteName}");
+        }
+        
         $em = $this->dbManager->getEntityManagerForSite($siteName);
         
         $site = $em->getRepository(Site::class)
-            ->findOneBy(['name' => $siteName]);
+            ->findOneBy(['name' => $siteEnum]);
 
         if (!$site) {
             $site = new Site();
-            $site->setName($siteName);
-            
-            $domain = match($siteName) {
-                'silenus' => 'silenus.local',
-                'insidiome' => 'insidiome.local',
-                default => 'localhost'
-            };
-            
-            $site->setDomain($domain);
+            $site->setName($siteEnum);
+            $site->setDomain($siteEnum->getDomain());
 
             $em->persist($site);
             $em->flush();

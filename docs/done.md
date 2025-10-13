@@ -156,4 +156,27 @@
 - Interface d'administration
 
 ---
-*Dernière mise à jour : 2025-10-07 13:43*
+
+## 2025-10-13
+
+### Infrastructure TypeScript + Tailwind (TERMINÉ)
+- [x] Migration Yarn 4 → npm (incompatibilité Webpack Encore)
+- [x] Configuration TypeScript (tsconfig.json sans noEmit)
+- [x] Configuration Tailwind pour scanner les fichiers .ts
+- [x] Suppression des fichiers .js doublons (app.js, bootstrap.js)
+- [x] Build des assets réussi via Docker (node:20-alpine)
+- [x] Scripts d'automatisation créés (install.sh, fix-assets.sh, check.sh)
+- [x] Documentation complète (QUICKSTART.md, TROUBLESHOOTING.md, TECH_STACK.md)
+- [x] Makefile avec commandes simplifiées
+
+### Énumération SiteEnum (TERMINÉ)
+- [x] Création de `src/Enum/SiteEnum.php`
+- [x] Méthodes utiles : getCode(), getDisplayName(), getDomain(), getPrimaryColor(), getRoutePrefix()
+- [x] Modification de l'entité Site pour utiliser l'enum
+- [x] Migration de la colonne name en type ENUM('silenus', 'insidiome')
+- [x] Mise à jour du SiteManager pour utiliser l'enum
+- [x] Type safety et centralisation des informations de site
+- [x] Documentation dans `docs/enum-site-implementation.md`
+
+---
+*Dernière mise à jour : 2025-10-13 11:42*

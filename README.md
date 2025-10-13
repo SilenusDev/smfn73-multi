@@ -14,7 +14,8 @@ make start
 
 📖 **Guide de démarrage** : voir [QUICKSTART.md](QUICKSTART.md)  
 📚 **Documentation complète** : voir [INSTALL.md](INSTALL.md)  
-🛠️ **Stack technique** : voir [TECH_STACK.md](TECH_STACK.md)
+🛠️ **Stack technique** : voir [TECH_STACK.md](TECH_STACK.md)  
+🆘 **Dépannage** : voir [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
 ---
 

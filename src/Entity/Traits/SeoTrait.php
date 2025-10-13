@@ -24,12 +24,6 @@ trait SeoTrait
     private ?string $descrEN = null;
 
     #[ORM\Column(length: 254, nullable: true)]
-    private ?string $tagsFR = null;
-
-    #[ORM\Column(length: 254, nullable: true)]
-    private ?string $tagsEN = null;
-
-    #[ORM\Column(length: 254, nullable: true)]
     private ?string $urlFR = null;
 
     #[ORM\Column(length: 254, nullable: true)]
@@ -79,28 +73,6 @@ trait SeoTrait
     public function setDescrEN(?string $descrEN): self
     {
         $this->descrEN = $descrEN;
-        return $this;
-    }
-
-    public function getTagsFR(): ?string
-    {
-        return $this->tagsFR;
-    }
-
-    public function setTagsFR(?string $tagsFR): self
-    {
-        $this->tagsFR = $tagsFR;
-        return $this;
-    }
-
-    public function getTagsEN(): ?string
-    {
-        return $this->tagsEN;
-    }
-
-    public function setTagsEN(?string $tagsEN): self
-    {
-        $this->tagsEN = $tagsEN;
         return $this;
     }
 

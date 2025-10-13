@@ -6,10 +6,14 @@ doctrine:
                 url: '%env(resolve:DATABASE_SLNS_URL)%'
                 profiling_collect_backtrace: '%kernel.debug%'
                 use_savepoints: true
+                mapping_types:
+                    enum: string
             insidiome:
                 url: '%env(resolve:DATABASE_NSDM_URL)%'
                 profiling_collect_backtrace: '%kernel.debug%'
                 use_savepoints: true
+                mapping_types:
+                    enum: string
 
     orm:
         default_entity_manager: silenus
