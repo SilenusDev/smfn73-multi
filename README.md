@@ -1,7 +1,22 @@
-<<<<<<< HEAD
 # SMFN73 Multi-Site Symfony 7.3
 
 Projet multi-site Symfony 7.3 avec deux bases de données séparées (SLNS et NSDM).
+
+## 🚀 Installation rapide
+
+```bash
+# Installation automatique en une commande
+./install.sh
+
+# Démarrer le projet
+make start
+```
+
+📖 **Guide de démarrage** : voir [QUICKSTART.md](QUICKSTART.md)  
+📚 **Documentation complète** : voir [INSTALL.md](INSTALL.md)  
+🛠️ **Stack technique** : voir [TECH_STACK.md](TECH_STACK.md)
+
+---
 
 ## Prérequis
 
@@ -9,7 +24,7 @@ Projet multi-site Symfony 7.3 avec deux bases de données séparées (SLNS et NS
 - Docker Compose ou Podman Compose
 - Git
 
-## Installation
+## Installation manuelle
 
 ### 1. Cloner le projet
 ```bash

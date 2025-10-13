@@ -11,4 +11,8 @@
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
+# Yarn (on utilise npm)
+/.yarn/
+/.yarnrc.yml
+/yarn.lock
 ###< symfony/webpack-encore-bundle ###
