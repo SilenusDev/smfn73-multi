@@ -49,7 +49,7 @@ rm -f assets/app.js assets/bootstrap.js
 make build
 ```
 
-### Problème avec Yarn ou erreurs de compilation
+### Problème avec npm ou erreurs de compilation
 
 ```bash
 # Correction automatique
@@ -120,8 +120,8 @@ make db-reset              # Reset complet
 
 ## Tips
 
-- ✅ Toujours utiliser **npm** (pas yarn)
+- ✅ Toujours utiliser **npm**
 - ✅ Toujours builder via **Docker** : `make build`
 - ✅ Fichiers TypeScript en **`.ts`** uniquement
 - ✅ Tailwind scanne les fichiers **`.ts`** et **`.twig`**
-- ❌ Ne pas commiter `node_modules/`, `.yarn/`, `yarn.lock`
+- ❌ Ne pas commiter `node_modules/`

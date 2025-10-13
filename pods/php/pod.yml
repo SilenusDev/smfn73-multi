@@ -1,0 +1,56 @@
+# pods/php/pod.yml
+# Configuration du pod PHP 8.3 FPM
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: symfony-php-pod
+  labels:
+    app: symfony-multi
+    service: php
+    category: runtime
+spec:
+  containers:
+  - name: symfony-php
+    image: localhost/symfony-php:8.3-fpm
+    ports:
+    - containerPort: 9000
+      hostPort: 6908
+    env:
+    - name: DATABASE_SLNS_URL
+      value: "mysql://symfony_user:symfony_password_change_me@mariadb:3306/slns_db?serverVersion=mariadb-10.11&charset=utf8mb4"
+    - name: DATABASE_NSDM_URL
+      value: "mysql://symfony_user:symfony_password_change_me@mariadb:3306/nsdm_db?serverVersion=mariadb-10.11&charset=utf8mb4"
+    - name: REDIS_URL
+      value: "redis://redis:6379"
+    - name: APP_ENV
+      value: "dev"
+    - name: APP_SECRET
+      value: "change_this_secret_key_in_production"
+    volumeMounts:
+    - name: symfony-code
+      mountPath: /var/www/html
+    - name: php-config
+      mountPath: /usr/local/etc/php/conf.d
+    - name: php-logs
+      mountPath: /var/log/php
+    - name: symfony-var
+      mountPath: /var/www/html/var
+  volumes:
+  - name: symfony-code
+    hostPath:
+      path: /home/sam/Bureau/dev/production/smfn_73_multi
+      type: Directory
+  - name: php-config
+    hostPath:
+      path: /home/sam/Bureau/dev/production/smfn_73_multi/pods/php/config
+      type: DirectoryOrCreate
+  - name: php-logs
+    hostPath:
+      path: /home/sam/Bureau/dev/production/smfn_73_multi/pods/php/logs
+      type: DirectoryOrCreate
+  - name: symfony-var
+    hostPath:
+      path: /home/sam/Bureau/dev/production/smfn_73_multi/pods/php/data/var
+      type: DirectoryOrCreate
+  restartPolicy: Always

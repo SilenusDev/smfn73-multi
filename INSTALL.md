@@ -78,7 +78,7 @@ make db-reset          # Reset complet de la BDD
 - **TypeScript** : Tous les fichiers JS sont en `.ts`
 - **Tailwind CSS** : Configuration dans `tailwind.config.js`
 - **Webpack Encore** : Configuration dans `webpack.config.js`
-- **npm** : Gestionnaire de paquets (pas Yarn)
+- **npm** : Gestionnaire de paquets
 
 ## Problèmes courants
 

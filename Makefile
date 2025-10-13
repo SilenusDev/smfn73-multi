@@ -57,5 +57,5 @@ cache-clear: ## Vide le cache Symfony
 check: ## Vérifie l'installation
 	@./check.sh
 
-fix-assets: ## Corrige les problèmes d'assets (yarn/npm)
+fix-assets: ## Corrige les problèmes d'assets
 	@./fix-assets.sh

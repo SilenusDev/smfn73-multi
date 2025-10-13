@@ -1,0 +1,36 @@
+# pods/qdrant/pod.yml
+# Configuration du pod Qdrant (vector database)
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: symfony-qdrant-pod
+  labels:
+    app: symfony-multi
+    service: qdrant
+    category: optional
+spec:
+  containers:
+  - name: symfony-qdrant
+    image: docker.io/qdrant/qdrant:latest
+    ports:
+    - containerPort: 6333
+      hostPort: 6905
+    env:
+    - name: QDRANT__SERVICE__GRPC_PORT
+      value: "6334"
+    volumeMounts:
+    - name: qdrant-data
+      mountPath: /qdrant/storage
+    - name: qdrant-config
+      mountPath: /qdrant/config
+  volumes:
+  - name: qdrant-data
+    hostPath:
+      path: ${PODS_DIR}/qdrant/data
+      type: DirectoryOrCreate
+  - name: qdrant-config
+    hostPath:
+      path: ${PODS_DIR}/qdrant/config
+      type: DirectoryOrCreate
+  restartPolicy: Always

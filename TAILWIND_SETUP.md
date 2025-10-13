@@ -18,9 +18,6 @@
 
 ```bash
 # Dans le conteneur Node ou en local
-yarn install
-
-# ou avec npm
 npm install
 ```
 
@@ -34,13 +31,13 @@ npm install
 
 ```bash
 # Mode watch (recommandé pour le développement)
-yarn watch
+npm run watch
 
 # ou build unique
-yarn dev
+npm run dev
 
 # ou build production
-yarn build
+npm run build
 ```
 
 ### 3. Vérifier le résultat
@@ -121,7 +118,7 @@ Ouvrir dans le navigateur :
 
 ```bash
 # Vérifier que le build est terminé
-yarn watch
+npm run watch
 
 # Vider le cache Symfony
 php bin/console cache:clear
@@ -147,7 +144,7 @@ C'est normal ! Ces warnings apparaissent dans l'IDE mais disparaissent après le
 ```bash
 # En production, Tailwind purge le CSS inutilisé
 # Le fichier final fait ~10-50 KB au lieu de 3.5 MB
-yarn build
+npm run build
 ```
 
 ---
@@ -190,8 +187,8 @@ Les templates de base sont mis à jour, mais les pages enfants utilisent encore 
 
 ## ✅ Checklist
 
-- [ ] Exécuter `yarn install`
-- [ ] Exécuter `yarn watch`
+- [ ] Exécuter `npm install`
+- [ ] Exécuter `npm run watch`
 - [ ] Vérifier Insidiome (purple)
 - [ ] Vérifier Silenus (lime)
 - [ ] Tester le responsive

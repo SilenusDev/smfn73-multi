@@ -21,10 +21,9 @@ make check
 
 ### Causes possibles
 
-#### 1. Fichiers Yarn résiduels
-Le projet utilise npm, pas yarn. Si des fichiers yarn existent :
+#### 1. Dépendances npm manquantes
+Le projet utilise npm. Vérifier que les dépendances sont installées :
 ```bash
-rm -rf .yarn yarn.lock .yarnrc.yml
 make fix-assets
 ```
 
@@ -68,7 +67,7 @@ make fix-assets
 ```
 
 ### Cause
-Le conteneur node utilise encore yarn au lieu de npm, ou les dépendances ne sont pas installées.
+Les dépendances npm ne sont pas installées correctement.
 
 ---
 
@@ -211,7 +210,6 @@ Si rien ne fonctionne :
 # 1. Tout arrêter et nettoyer
 docker compose down -v
 rm -rf node_modules vendor var/cache/* var/log/*
-rm -rf .yarn yarn.lock .yarnrc.yml
 rm -f assets/app.js assets/bootstrap.js
 
 # 2. Réinstaller

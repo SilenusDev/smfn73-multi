@@ -5,7 +5,7 @@
 ### Problème initial
 - Perte des styles après mise en place de TypeScript
 - Conflit entre TypeScript, Tailwind et Webpack
-- Yarn 4 incompatible avec Webpack Encore
+- Configuration du gestionnaire de paquets
 
 ### Solutions appliquées
 
@@ -18,17 +18,16 @@
 - ✅ Suppression de `"noEmit": true` dans `tsconfig.json`
 - Permet à ts-loader de compiler correctement
 
-#### 3. Migration Yarn → npm
-- ✅ Suppression de Yarn 4 (incompatible avec Webpack Encore PnP)
+#### 3. Configuration npm
 - ✅ Utilisation de npm avec node_modules classique
 - ✅ Mise à jour de `docker-compose.yml` pour utiliser npm
-- ✅ Suppression de `packageManager: "yarn@4.10.3"` dans package.json
+- ✅ Configuration `.npmrc` pour optimiser l'installation
 
 #### 4. Nettoyage des fichiers
 - ✅ Suppression des doublons `.js`/`.ts` :
   - `assets/app.js` (doublon de app.ts)
   - `assets/bootstrap.js` (doublon de bootstrap.ts)
-- ✅ Ajout des fichiers Yarn au `.gitignore`
+- ✅ Mise à jour du `.gitignore`
 
 #### 5. Configuration Webpack
 - ✅ `.enablePostCssLoader()` pour Tailwind
@@ -51,8 +50,8 @@
 
 #### Configuration
 - `.npmrc` - Configuration npm
-- `.gitignore` - Ajout des fichiers Yarn à ignorer
-- `package.json` - Suppression de la référence à Yarn
+- `.gitignore` - Fichiers à ignorer
+- `package.json` - Dépendances du projet
 
 ### Commandes disponibles
 
@@ -92,11 +91,11 @@ make clean                # Nettoyage complet
 
 ### Points importants
 
-1. ✅ Toujours utiliser **npm** (jamais yarn)
+1. ✅ Toujours utiliser **npm**
 2. ✅ Toujours builder via **Docker** : `make build`
 3. ✅ Fichiers TypeScript en **`.ts`** uniquement
 4. ✅ Tailwind scanne **`.ts`** et **`.twig`**
-5. ❌ Ne pas commiter `node_modules/`, `.yarn/`, `yarn.lock`
+5. ❌ Ne pas commiter `node_modules/`
 
 ### Tests effectués
 

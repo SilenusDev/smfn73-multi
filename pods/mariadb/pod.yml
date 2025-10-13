@@ -1,0 +1,48 @@
+# pods/mariadb/pod.yml
+# Configuration du pod MariaDB 10.11
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: symfony-mariadb-pod
+  labels:
+    app: symfony-multi
+    service: mariadb
+    category: database
+spec:
+  containers:
+  - name: symfony-mariadb
+    image: docker.io/library/mariadb:10.11
+    ports:
+    - containerPort: 3306
+      hostPort: 6909
+    env:
+    - name: MARIADB_RANDOM_ROOT_PASSWORD
+      value: "yes"
+    - name: MARIADB_USER
+      value: "symfony"
+    - name: MARIADB_PASSWORD
+      value: "symfony"
+    - name: TZ
+      value: "Europe/Paris"
+    volumeMounts:
+    - name: mariadb-data
+      mountPath: /var/lib/mysql
+    - name: mariadb-config
+      mountPath: /etc/mysql/conf.d
+    - name: mariadb-init
+      mountPath: /docker-entrypoint-initdb.d
+  volumes:
+  - name: mariadb-data
+    hostPath:
+      path: /home/sam/Bureau/dev/production/smfn_73_multi/pods/mariadb/data
+      type: DirectoryOrCreate
+  - name: mariadb-config
+    hostPath:
+      path: /home/sam/Bureau/dev/production/smfn_73_multi/pods/mariadb/config
+      type: DirectoryOrCreate
+  - name: mariadb-init
+    hostPath:
+      path: /home/sam/Bureau/dev/production/smfn_73_multi/pods/mariadb/init
+      type: DirectoryOrCreate
+  restartPolicy: Always

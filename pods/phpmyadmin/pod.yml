@@ -1,0 +1,26 @@
+# pods/phpmyadmin/pod.yml
+# Configuration du pod phpMyAdmin
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: symfony-phpmyadmin-pod
+  labels:
+    app: symfony-multi
+    service: phpmyadmin
+    category: optional
+spec:
+  containers:
+  - name: symfony-phpmyadmin
+    image: docker.io/library/phpmyadmin:latest
+    ports:
+    - containerPort: 80
+      hostPort: 6907
+    env:
+    - name: PMA_HOST
+      value: "mariadb"
+    - name: PMA_PORT
+      value: "3306"
+    - name: MYSQL_ROOT_PASSWORD
+      value: "${DB_ROOT_PASSWORD}"
+  restartPolicy: Always

@@ -13,11 +13,11 @@
 
 **Problème initial** :
 - Perte des styles après migration vers TypeScript
-- Conflit entre Yarn 4, TypeScript et Webpack Encore
+- Configuration du gestionnaire de paquets
 - Fichiers .js doublons causant des erreurs de compilation
 
 **Solutions appliquées** :
-- ✅ Migration de Yarn 4 → npm (Yarn PnP incompatible avec Webpack Encore)
+- ✅ Configuration npm avec node_modules classique
 - ✅ Configuration Tailwind pour scanner `*.ts` en plus de `*.js`
 - ✅ Suppression de `noEmit: true` dans tsconfig.json
 - ✅ Suppression des fichiers .js doublons (app.js, bootstrap.js)
@@ -51,7 +51,7 @@ make help         # Voir toutes les commandes
 - `TECH_STACK.md` - Documentation technique et choix
 - `TROUBLESHOOTING.md` - Guide de dépannage
 - `CHANGELOG_TYPESCRIPT.md` - Historique des modifications
-- `.gitignore` - Mise à jour pour exclure Yarn
+- `.gitignore` - Mise à jour
 
 ### 4. Amélioration architecturale : SiteEnum
 
@@ -149,7 +149,7 @@ make check
 ✅ Assets buildés
 ✅ Configuration TypeScript OK
 ✅ Tailwind configuré pour TypeScript
-✅ Pas de fichiers Yarn (npm utilisé)
+✅ npm utilisé
 ✅ Pas de fichiers .js doublons
 ```
 
@@ -173,7 +173,7 @@ make start
 
 ## 📝 Leçons apprises
 
-1. **Yarn 4 PnP** n'est pas compatible avec Webpack Encore → Utiliser npm
+1. **npm** fonctionne parfaitement avec Webpack Encore
 2. **Tailwind** doit scanner les fichiers `.ts` explicitement
 3. **TypeScript** avec `noEmit: true` empêche ts-loader de fonctionner
 4. **Fichiers doublons** .js/.ts causent des conflits → Supprimer les .js

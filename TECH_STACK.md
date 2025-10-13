@@ -2,12 +2,12 @@
 
 ## Choix techniques et raisons
 
-### Gestionnaire de paquets : npm (pas Yarn)
+### Gestionnaire de paquets : npm
 
-**Raison** : Yarn 4 avec Plug'n'Play (PnP) est incompatible avec Webpack Encore.
-- Webpack Encore ne détecte pas correctement les loaders avec Yarn PnP
-- npm avec node_modules classique fonctionne sans configuration supplémentaire
-- Simplicité et compatibilité maximale
+**Raison** : npm avec node_modules classique fonctionne parfaitement avec Webpack Encore.
+- Compatibilité maximale avec tous les loaders
+- Configuration simple et standard
+- Pas de complexité supplémentaire
 
 ### TypeScript
 
@@ -78,9 +78,9 @@ Si TypeScript ne compile pas :
 2. Vérifier que les fichiers `.js` doublons sont supprimés
 3. Rebuild : `make build`
 
-Si npm/yarn pose problème :
-1. Supprimer `node_modules`, `.yarn`, `yarn.lock`
-2. Utiliser uniquement npm : `docker compose run --rm node npm install`
+Si npm pose problème :
+1. Supprimer `node_modules`
+2. Réinstaller : `docker compose run --rm node npm install`
 
 ## Dépendances critiques
 
@@ -96,7 +96,7 @@ Si npm/yarn pose problème :
 
 ## Notes importantes
 
-1. **Toujours utiliser npm**, jamais yarn dans ce projet
+1. **Toujours utiliser npm**
 2. **Toujours builder via Docker** : `docker compose run --rm node npm run build`
-3. **Ne pas commiter** : `node_modules/`, `.yarn/`, `yarn.lock`
+3. **Ne pas commiter** : `node_modules/`
 4. **Commiter** : `package.json`, `package-lock.json`

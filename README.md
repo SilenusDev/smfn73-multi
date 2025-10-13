@@ -83,21 +83,21 @@ docker exec -it symfony_web composer install
 
 ## Commandes utiles
 
-### Gestion des assets (Yarn/Vite)
+### Gestion des assets (npm/Webpack Encore)
 
 #### Mode watch (développement)
 ```bash
-docker exec -it symfony_node yarn watch
+docker exec -it symfony_node npm run watch
 ```
 
 #### Build développement
 ```bash
-docker exec -it symfony_node yarn dev
+docker exec -it symfony_node npm run dev
 ```
 
 #### Build production
 ```bash
-docker exec -it symfony_node yarn build
+docker exec -it symfony_node npm run build
 ```
 
 ### Gestion des conteneurs
@@ -225,7 +225,7 @@ docker-compose exec web php bin/console app:init-sites
 |---------|-------|------|-------------|
 | **web** | php:8.3-apache | 8080 | Application Symfony |
 | **db** | mariadb:10.11 | 3306 | Base de données |
-| **node** | node:20-alpine | 5173 | Yarn watch (assets) |
+| **node** | node:20-alpine | 5173 | npm watch (assets) |
 | **phpmyadmin** | phpmyadmin/phpmyadmin | 8081 | Interface BDD |
 
 ### Bases de Données
@@ -318,17 +318,17 @@ docker-compose exec web php bin/console app:init-sites
 docker-compose exec web php bin/console cache:clear
 ```
 
-### Yarn (Assets)
+### npm (Assets)
 
 ```bash
 # Installer les dépendances
-docker-compose exec node yarn install
+docker-compose exec node npm install
 
 # Build production
-docker-compose exec node yarn build
+docker-compose exec node npm run build
 
 # Watch (déjà actif dans le conteneur)
-docker-compose exec node yarn watch
+docker-compose exec node npm run watch
 ```
 
 ---

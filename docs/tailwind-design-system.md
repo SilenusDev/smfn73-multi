@@ -486,9 +486,6 @@ Bouton glassmorphisme.
 
 ```bash
 # Installer les dépendances
-yarn install
-
-# ou avec npm
 npm install
 ```
 
@@ -496,17 +493,17 @@ npm install
 
 ```bash
 # Watch mode (recommandé)
-yarn watch
+npm run watch
 
 # Build dev
-yarn dev
+npm run dev
 ```
 
 ### Production
 
 ```bash
 # Build optimisé avec purge CSS
-yarn build
+npm run build
 ```
 
 ---

@@ -44,7 +44,7 @@
 ### Infrastructure Docker (TERMINÉ)
 - [x] Migration de Podman vers Docker (problèmes de permissions résolus)
 - [x] Configuration docker-compose.yml opérationnelle
-- [x] Services démarrés: web (PHP 8.3 + Apache), db (MariaDB 10.11), node (Yarn), phpmyadmin
+- [x] Services démarrés: web (PHP 8.3 + Apache), db (MariaDB 10.11), node (npm), phpmyadmin
 - [x] Ports configurés: 8080 (web), 3306 (db), 8081 (phpmyadmin), 5173 (node)
 - [x] Volumes persistants pour MariaDB
 - [x] Script init.sql pour création des 2 bases (slns_db, nsdm_db)
@@ -79,7 +79,7 @@
 
 ### Assets et Frontend (PARTIELLEMENT FAIT)
 - [x] Webpack Encore configuré
-- [x] Yarn installé et fonctionnel
+- [x] npm installé et fonctionnel
 - [x] Node conteneur opérationnel avec watch
 - [x] Build des assets réussi
 - [ ] Structure assets par site à créer (common, silenus, insidiome)
@@ -160,7 +160,7 @@
 ## 2025-10-13
 
 ### Infrastructure TypeScript + Tailwind (TERMINÉ)
-- [x] Migration Yarn 4 → npm (incompatibilité Webpack Encore)
+- [x] Configuration npm avec node_modules classique
 - [x] Configuration TypeScript (tsconfig.json sans noEmit)
 - [x] Configuration Tailwind pour scanner les fichiers .ts
 - [x] Suppression des fichiers .js doublons (app.js, bootstrap.js)
