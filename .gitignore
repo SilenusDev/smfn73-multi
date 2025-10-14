@@ -24,3 +24,9 @@
 /pods/*/data/
 /pods/*/logs/
 ###< podman/data ###
+
+###> podman/configs ###
+# Fichiers pod.yml générés (ne pas versionner)
+# Les templates .pod.yml.template sont versionnés
+/pods/*/pod.yml
+###< podman/configs ###

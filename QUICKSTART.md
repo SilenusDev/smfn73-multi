@@ -15,7 +15,7 @@ make start
 
 ## Accès
 
-- **Application** : http://localhost:8000
+- **Application** : http://localhost:8080
 - **phpMyAdmin** : http://localhost:8081
 
 ## Commandes essentielles
@@ -38,7 +38,8 @@ make fix-assets
 
 # Ou manuellement
 make build
-docker compose restart node
+./scripts/symfony-orchestrator.sh stop node
+./scripts/symfony-orchestrator.sh start node
 ```
 
 ### Erreur TypeScript
@@ -77,7 +78,8 @@ smfn73-multi/
 ├── src/                    # Code PHP Symfony
 ├── public/
 │   └── build/             # Assets compilés (généré)
-├── docker-compose.yml     # Configuration Docker
+├── pods/                  # Configuration Podman
+├── scripts/               # Scripts d'orchestration
 ├── webpack.config.js      # Configuration Webpack
 ├── tailwind.config.js     # Configuration Tailwind
 ├── tsconfig.json          # Configuration TypeScript
@@ -104,10 +106,10 @@ smfn73-multi/
 
 ```bash
 # PHP
-docker compose run --rm web composer require [package]
+podman exec -it symfony-multi-web-container composer require [package]
 
 # Node
-docker compose run --rm node npm install [package]
+podman exec -it symfony-multi-node-container npm install [package]
 ```
 
 ### Base de données
@@ -121,7 +123,8 @@ make db-reset              # Reset complet
 ## Tips
 
 - ✅ Toujours utiliser **npm**
-- ✅ Toujours builder via **Docker** : `make build`
+- ✅ Toujours builder via **Podman** : `make build`
 - ✅ Fichiers TypeScript en **`.ts`** uniquement
 - ✅ Tailwind scanne les fichiers **`.ts`** et **`.twig`**
+- ✅ Utiliser les commandes **make** pour gérer les pods
 - ❌ Ne pas commiter `node_modules/`

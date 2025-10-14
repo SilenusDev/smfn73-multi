@@ -56,12 +56,13 @@ echo ""
 
 # Copier .env.podman si nécessaire
 if [ ! -f "$PROJECT_ROOT/.env.podman" ]; then
-    if [ -f "$PROJECT_ROOT/.env.example" ]; then
-        echo "  📄 Création de .env.podman depuis .env.example..."
-        cp "$PROJECT_ROOT/.env.example" "$PROJECT_ROOT/.env.podman"
+    if [ -f "$PROJECT_ROOT/.env.podman.example" ]; then
+        echo "  📄 Création de .env.podman depuis .env.podman.example..."
+        cp "$PROJECT_ROOT/.env.podman.example" "$PROJECT_ROOT/.env.podman"
         echo "  ⚠️  N'oubliez pas de configurer .env.podman avec vos paramètres"
+        echo "  ⚠️  Notamment: PROJECT_ROOT (chemin absolu du projet)"
     else
-        echo "  ⚠️  Aucun fichier .env.example trouvé"
+        echo "  ⚠️  Aucun fichier .env.podman.example trouvé"
     fi
 else
     echo "  ✅ Fichier .env.podman présent"
@@ -102,7 +103,28 @@ echo "  ✅ Nettoyage terminé"
 echo ""
 
 # ============================================================================
-# 4. BUILD DE L'IMAGE PHP
+# 4. GÉNÉRATION DES CONFIGURATIONS PODMAN
+# ============================================================================
+
+echo "⚙️  Génération des configurations Podman..."
+echo ""
+
+# Générer les fichiers pod.yml à partir des templates
+if [ -f "$SCRIPT_DIR/generate-pod-configs.sh" ]; then
+    "$SCRIPT_DIR/generate-pod-configs.sh"
+    if [ $? -ne 0 ]; then
+        echo "  ❌ Échec de la génération des configurations"
+        echo "  ⚠️  Vérifiez votre fichier .env.podman"
+        exit 1
+    fi
+else
+    echo "  ⚠️  Script generate-pod-configs.sh non trouvé"
+fi
+
+echo ""
+
+# ============================================================================
+# 5. BUILD DE L'IMAGE PHP
 # ============================================================================
 
 echo "🐘 Build de l'image PHP personnalisée..."

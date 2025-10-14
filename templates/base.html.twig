@@ -1,19 +1,136 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="{% block lang %}fr{% endblock %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    
+    {# SEO Meta Tags #}
+    <meta name="description" content="{% block description %}{% endblock %}"/>
+    <meta name="author" content="{% block author %}{% endblock %}"/>
+    <meta name="keywords" content="{% block keywords %}{% endblock %}"/>
+    <link rel="canonical" href="{% block canonical %}{% endblock %}"/>
+    
+    {# Open Graph Meta Tags #}
+    <meta property="og:title" content="{% block og_title %}{% endblock %}"/>
+    <meta property="og:description" content="{% block og_description %}{% endblock %}"/> 
+    <meta property="og:image" content="{% block og_image %}{% endblock %}"/>
+    {# jpeg paysage 1200x630 #}
+    <meta property="og:url" content="{% block og_link %}{% endblock %}"/>
+    <meta property="og:type" content="{% block og_type %}{% endblock %}"/>
+    <meta property="og:locale" content="{% block og_locale %}{% endblock %}"/>
+    {# fr_FR, en_US #}
+    {# types : website, article, book, profile, video, music, quiz, game, product, app, event, group, blog, object, author #}
+    <meta property="og:author" content="{% block og_author %}{% endblock %}"/>
+    <meta property="og:site_name" content="{% block og_site_name %}{% endblock %}">
+    
+    {# SEO Robots #}
+    <link rel="robots" href="{{ app.request.getSchemeAndHttpHost() }}/robots.txt">
+    <meta name="robots" content="{% block robots %}index,follow{% endblock %}">
+    {# index,follow | noindex,follow | noindex,nofollow #}
+    <link rel="sitemap" href="{{ app.request.getSchemeAndHttpHost() }}/sitemap.xml">
+    
+    {# AI SEO - Meta tags for AI crawlers #}
+    <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="chatgpt" content="index">
+    <meta name="ai-content-declaration" content="ai-generated=false">
+    
+    {# Schema.org JSON-LD for AI understanding #}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "{% block schema_type %}WebSite{% endblock %}",
+        "name": "{% block schema_name %}{% endblock %}",
+        "url": "{{ app.request.getSchemeAndHttpHost() }}",
+        "description": "{{ block('description') }}",
+        "inLanguage": "{% block schema_lang %}fr-FR{% endblock %}",
+        "author": {
+            "@type": "Organization",
+            "name": "{% block schema_author %}{% endblock %}"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "{% block schema_publisher %}{% endblock %}",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{{ app.request.getSchemeAndHttpHost() }}{% block schema_logo %}/build/img/gen/logo.png{% endblock %}"
+            }
+        }
+    }
+    </script>
+    
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+{% set route_prefix = app.request.attributes.get('_route')|split('_')[0] %}
+{% set site = route_prefix == 'slns' ? 'silenus' : (route_prefix == 'nsdm' ? 'insidiome' : route_prefix) %}
+{% set site_class = route_prefix == 'slns' ? 'site-slns' : (route_prefix == 'nsdm' ? 'site-nsdm' : '') %}
+<body class="{% block body_class %}{{ site_class }} min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950{% endblock %}">
+    
+    <!-- Main Layout Container -->
+    <div class="flex justify-center items-start px-2 md:px-4 py-2 md:py-4 lg:py-6 gap-2 md:gap-4 lg:gap-6 min-h-screen">
+        <!-- Aside Left - Widgets (disparaît < 1280px) -->
+        <aside class="hidden xl:block w-[280px] flex-shrink-0 h-screen">
+            <div class="fixed left-2 md:left-4 lg:left-6 top-2 md:top-4 lg:top-6 bottom-2 md:bottom-4 lg:bottom-6 w-[280px]">
+                {% block aside_left %}
+                    {% include site ~ '/partials/_aside_left.html.twig' %}
+                {% endblock %}
+            </div>
+        </aside>
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+        <!-- Central Content (max 768px) -->
+        <div class="w-full max-w-3xl flex-shrink-0 flex flex-col justify-between min-h-[calc(100vh-1rem)] md:min-h-[calc(100vh-2rem)] lg:min-h-[calc(100vh-3rem)]">
+            <div>
+                {% block header %}
+                    {% include site ~ '/partials/_header.html.twig' %}
+                {% endblock %}
+
+                <!-- Main content -->
+                <main class="glass-lg rounded-lg md:rounded-xl lg:rounded-2xl p-3 md:p-5 lg:p-8 mb-2 md:mb-4 lg:mb-8 animate-slide-up">
+                    {% block body %}
+                        <!-- Flash messages -->
+                        {% for message in app.flashes('success') %}
+                            <div class="glass border-green-500/30 bg-green-500/10 text-green-400 px-3 py-2 md:px-4 md:py-3 rounded-lg mb-2 md:mb-3 lg:mb-4 animate-fade-in">
+                                <div class="flex items-center gap-2 md:gap-3">
+                                    <i data-lucide="check-circle" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                    <span class="text-sm md:text-base">{{ message }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                        {% for message in app.flashes('error') %}
+                            <div class="glass border-red-500/30 bg-red-500/10 text-red-400 px-3 py-2 md:px-4 md:py-3 rounded-lg mb-2 md:mb-3 lg:mb-4 animate-fade-in">
+                                <div class="flex items-center gap-2 md:gap-3">
+                                    <i data-lucide="alert-circle" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                    <span class="text-sm md:text-base">{{ message }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {# Contenu de la page #}
+                        {% block content %}{% endblock %}
+                    {% endblock %}
+                </main>
+            </div>
+
+            {% block footer %}
+                {% include site ~ '/partials/_footer.html.twig' %}
+            {% endblock %}
+        </div>
+
+        <!-- Aside Right - Navigation (disparaît < 992px) -->
+        <aside class="hidden lg:block w-[280px] flex-shrink-0 h-screen">
+            <div class="fixed right-2 md:right-4 lg:right-6 top-2 md:top-4 lg:top-6 bottom-2 md:bottom-4 lg:bottom-6 w-[280px]">
+                {% block aside_right %}
+                    {% include site ~ '/partials/_aside_right.html.twig' %}
+                {% endblock %}
+            </div>
+        </aside>
+    </div>
+
+    {% block javascripts %}
+    {% endblock %}
+</body>
 </html>

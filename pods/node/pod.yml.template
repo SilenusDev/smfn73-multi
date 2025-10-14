@@ -5,18 +5,18 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: symfony-multi-node-pod
+  name: ${PROJECT_NAME}-node-pod
   labels:
-    app: symfony-multi
+    app: ${PROJECT_NAME}
     service: node
     category: build
 spec:
   containers:
-  - name: symfony-multi-node
-    image: docker.io/library/node:20-alpine
+  - name: ${PROJECT_NAME}-node
+    image: ${IMAGE_NODE}
     ports:
     - containerPort: 5173
-      hostPort: 6904
+      hostPort: ${NODE_PORT}
     workingDir: /app
     command: ["sh", "-c", "npm install && npm run watch"]
     env:
@@ -30,10 +30,10 @@ spec:
   volumes:
   - name: symfony-code
     hostPath:
-      path: /home/sam/Bureau/DEV/smfn73-multi
+      path: ${PROJECT_ROOT}
       type: Directory
   - name: node-modules
     hostPath:
-      path: /home/sam/Bureau/DEV/smfn73-multi/pods/node/data/node_modules
+      path: ${PROJECT_ROOT}/pods/node/data/node_modules
       type: DirectoryOrCreate
   restartPolicy: Always

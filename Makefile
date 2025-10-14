@@ -1,4 +1,4 @@
-.PHONY: install start stop build watch clean help
+.PHONY: install start stop build watch clean help status logs composer-install npm-install db-create db-migrate db-reset cache-clear check fix-assets dev prod
 
 help: ## Affiche l'aide
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -6,56 +6,87 @@ help: ## Affiche l'aide
 install: ## Installation complète du projet
 	@./install.sh
 
-start: ## Démarre tous les conteneurs
-	@docker compose up -d
-	@echo "✅ Projet démarré"
-	@echo "🌐 Web: http://localhost:8000"
-	@echo "🗄️  phpMyAdmin: http://localhost:8081"
+start: ## Démarre tous les pods en mode développement
+	@./scripts/symfony-orchestrator.sh start
 
-stop: ## Arrête tous les conteneurs
-	@docker compose down
+dev: ## Démarre le projet en mode dev avec watch (alias de start)
+	@./scripts/symfony-orchestrator.sh dev
+
+prod: ## Démarre le projet en mode production
+	@./scripts/symfony-orchestrator.sh start --prod
+
+stop: ## Arrête tous les pods
+	@./scripts/symfony-orchestrator.sh stop all
+
+stop-symfony: ## Arrête uniquement les services essentiels Symfony
+	@./scripts/symfony-orchestrator.sh stop symfony
 
 build: ## Build les assets en production
-	@docker compose run --rm node npm run build
+	@./scripts/symfony-orchestrator.sh build
 	@echo "✅ Assets buildés"
 
 watch: ## Lance le watch des assets (mode dev)
-	@docker compose up node
+	@./scripts/symfony-orchestrator.sh node
 
-dev: ## Démarre le projet en mode dev avec watch
-	@docker compose up -d web db phpmyadmin
-	@docker compose up node
-
-clean: ## Nettoie les fichiers temporaires et conteneurs
-	@docker compose down -v
-	@rm -rf node_modules vendor var/cache/* var/log/*
+clean: ## Nettoie les pods et fichiers temporaires
+	@./scripts/symfony-orchestrator.sh clean all
+	@rm -rf var/cache/* var/log/*
 	@echo "✅ Nettoyage terminé"
 
-logs: ## Affiche les logs
-	@docker compose logs -f
+clean-symfony: ## Nettoie uniquement les services essentiels Symfony
+	@./scripts/symfony-orchestrator.sh clean symfony
+
+status: ## Affiche le statut de tous les pods
+	@./scripts/symfony-orchestrator.sh status all
+
+status-symfony: ## Affiche le statut des services essentiels Symfony
+	@./scripts/symfony-orchestrator.sh status symfony
+
+logs: ## Affiche les logs des pods
+	@podman pod ps
+	@echo ""
+	@echo "Pour voir les logs d'un pod spécifique:"
+	@echo "  podman logs -f symfony-multi-web-pod"
+	@echo "  podman logs -f symfony-multi-mariadb-pod"
 
 composer-install: ## Installe les dépendances PHP
-	@docker compose run --rm web composer install
+	@podman exec -it symfony-multi-web-container composer install
 
 npm-install: ## Installe les dépendances Node
-	@docker compose run --rm node npm install
+	@podman exec -it symfony-multi-node-container npm install
 
 db-create: ## Crée la base de données
-	@docker compose exec web php bin/console doctrine:database:create --if-not-exists
+	@podman exec -it symfony-multi-web-container php bin/console doctrine:database:create --if-not-exists
 
 db-migrate: ## Exécute les migrations
-	@docker compose exec web php bin/console doctrine:migrations:migrate --no-interaction
+	@podman exec -it symfony-multi-web-container php bin/console doctrine:migrations:migrate --no-interaction
 
 db-reset: ## Reset la base de données
-	@docker compose exec web php bin/console doctrine:database:drop --force --if-exists
-	@docker compose exec web php bin/console doctrine:database:create
-	@docker compose exec web php bin/console doctrine:migrations:migrate --no-interaction
+	@podman exec -it symfony-multi-web-container php bin/console doctrine:database:drop --force --if-exists
+	@podman exec -it symfony-multi-web-container php bin/console doctrine:database:create
+	@podman exec -it symfony-multi-web-container php bin/console doctrine:migrations:migrate --no-interaction
 
 cache-clear: ## Vide le cache Symfony
-	@docker compose exec web php bin/console cache:clear
+	@podman exec -it symfony-multi-web-container php bin/console cache:clear
 
 check: ## Vérifie l'installation
-	@./check.sh
+	@./scripts/check-podman.sh
 
 fix-assets: ## Corrige les problèmes d'assets
-	@./fix-assets.sh
+	@./scripts/fix-assets-podman.sh
+
+# Commandes individuelles pour les services
+mariadb: ## Démarre MariaDB
+	@./scripts/symfony-orchestrator.sh mariadb
+
+redis: ## Démarre Redis
+	@./scripts/symfony-orchestrator.sh redis
+
+web: ## Démarre le pod Web (Apache + PHP)
+	@./scripts/symfony-orchestrator.sh web
+
+node: ## Démarre Node.js
+	@./scripts/symfony-orchestrator.sh node
+
+phpmyadmin: ## Démarre phpMyAdmin
+	@./scripts/symfony-orchestrator.sh phpmyadmin

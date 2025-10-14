@@ -345,12 +345,14 @@ check_prerequisites() {
 
 get_pod_name() {
     local service=$1
-    echo "symfony-${service}-pod"
+    local project_name="${PROJECT_NAME:-symfony-multi}"
+    echo "${project_name}-${service}-pod"
 }
 
 get_container_name() {
     local service=$1
-    echo "symfony-${service}"
+    local project_name="${PROJECT_NAME:-symfony-multi}"
+    echo "${project_name}-${service}"
 }
 
 ensure_directories() {

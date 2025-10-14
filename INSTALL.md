@@ -2,8 +2,8 @@
 
 ## Prérequis
 
-- Docker
-- Docker Compose
+- **Podman** (recommandé)
+- Git
 
 ## Installation rapide
 
@@ -24,12 +24,12 @@ make install
 # Démarrer le projet
 make start
 
-# Ou avec docker compose
-docker compose up -d
+# Ou directement avec le script
+./scripts/symfony-orchestrator.sh start
 ```
 
 Le projet sera accessible sur :
-- **Application** : http://localhost:8000
+- **Application** : http://localhost:8080
 - **phpMyAdmin** : http://localhost:8081
 
 ## Développement
@@ -55,14 +55,14 @@ make clean             # Nettoie tout (conteneurs, volumes, cache)
 
 ```bash
 make composer-install  # Installe les dépendances PHP
-docker compose run --rm web composer require [package]
+podman exec -it symfony-multi-web-container composer require [package]
 ```
 
 ### Commandes npm
 
 ```bash
 make npm-install       # Installe les dépendances Node
-docker compose run --rm node npm install [package]
+podman exec -it symfony-multi-node-container npm install [package]
 ```
 
 ### Base de données
@@ -107,8 +107,8 @@ make start
 
 ## Configuration
 
-Le fichier `.env` contient toutes les variables d'environnement.
-Copiez `.env.example` vers `.env` et ajustez selon vos besoins.
+Le fichier `.env.podman` contient toutes les variables d'environnement.
+Copiez `.env.podman.example` vers `.env.podman` et ajustez selon vos besoins.
 
 Variables importantes :
 - `DB_HOST` : Hôte de la base de données

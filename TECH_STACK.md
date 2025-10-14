@@ -38,17 +38,19 @@
 - `.enablePostCssLoader()` - Support Tailwind CSS via PostCSS
 - Entry point : `assets/app.ts` (pas .js)
 
-### Docker
+### Podman
 
-**Images** :
-- `php:8.2-fpm-alpine` - PHP léger et rapide
+**Pods et Images** :
+- `php:8.3-apache` - PHP avec Apache intégré
 - `node:20-alpine` - Node.js LTS pour les assets
 - `mariadb:10.11` - Base de données
-- `nginx:alpine` - Serveur web
+- `redis:alpine` - Cache Redis
+- `phpmyadmin` - Interface de gestion BDD
 
-**Volumes** :
-- Code source monté en volume pour le développement
-- node_modules dans le conteneur (pas sur l'hôte)
+**Architecture** :
+- Pods Podman natifs (pas de compose)
+- Scripts d'orchestration personnalisés
+- Volumes montés pour le développement
 
 ## Commandes importantes
 
@@ -80,7 +82,7 @@ Si TypeScript ne compile pas :
 
 Si npm pose problème :
 1. Supprimer `node_modules`
-2. Réinstaller : `docker compose run --rm node npm install`
+2. Réinstaller : `make npm-install`
 
 ## Dépendances critiques
 
@@ -97,6 +99,7 @@ Si npm pose problème :
 ## Notes importantes
 
 1. **Toujours utiliser npm**
-2. **Toujours builder via Docker** : `docker compose run --rm node npm run build`
-3. **Ne pas commiter** : `node_modules/`
-4. **Commiter** : `package.json`, `package-lock.json`
+2. **Toujours builder via Podman** : `make build`
+3. **Utiliser les commandes make** pour gérer les pods
+4. **Ne pas commiter** : `node_modules/`
+5. **Commiter** : `package.json`, `package-lock.json`

@@ -5,30 +5,30 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: symfony-multi-web-pod
+  name: ${PROJECT_NAME}-web-pod
   labels:
-    app: symfony-multi
+    app: ${PROJECT_NAME}
     service: web
     category: webserver
 spec:
   containers:
   # Conteneur PHP-FPM
-  - name: symfony-multi-php
-    image: docker.io/library/php:8.3-fpm-alpine
+  - name: ${PROJECT_NAME}-php
+    image: ${IMAGE_PHP}
     ports:
     - containerPort: 9000
       protocol: TCP
     env:
     - name: DATABASE_SLNS_URL
-      value: "mysql://symfony:symfony@localhost:6909/slns_db?serverVersion=10.11.0&charset=utf8mb4"
+      value: "${DATABASE_SLNS_URL}"
     - name: DATABASE_NSDM_URL
-      value: "mysql://symfony:symfony@localhost:6909/nsdm_db?serverVersion=10.11.0&charset=utf8mb4"
+      value: "${DATABASE_NSDM_URL}"
     - name: REDIS_URL
-      value: "redis://localhost:6379"
+      value: "${REDIS_URL}"
     - name: APP_ENV
-      value: "dev"
+      value: "${APP_ENV}"
     - name: APP_SECRET
-      value: "change_this_secret_key_in_production"
+      value: "${APP_SECRET}"
     volumeMounts:
     - name: symfony-code
       mountPath: /var/www/html
@@ -36,8 +36,8 @@ spec:
       mountPath: /var/log/php
   
   # Conteneur Composer (utilitaire)
-  - name: symfony-multi-composer
-    image: docker.io/library/composer:latest
+  - name: ${PROJECT_NAME}-composer
+    image: ${IMAGE_COMPOSER}
     command: ["tail", "-f", "/dev/null"]
     volumeMounts:
     - name: symfony-code
@@ -45,11 +45,11 @@ spec:
     workingDir: /var/www/html
   
   # Conteneur Apache
-  - name: symfony-multi-apache
-    image: docker.io/library/httpd:2.4-alpine
+  - name: ${PROJECT_NAME}-apache
+    image: ${IMAGE_APACHE}
     ports:
     - containerPort: 80
-      hostPort: 6900
+      hostPort: ${APACHE_PORT}
     command: 
     - sh
     - -c
@@ -76,14 +76,14 @@ spec:
   volumes:
   - name: symfony-code
     hostPath:
-      path: /home/sam/Bureau/DEV/smfn73-multi
+      path: ${PROJECT_ROOT}
       type: Directory
   - name: web-config
     hostPath:
-      path: /home/sam/Bureau/DEV/smfn73-multi/pods/web/config
+      path: ${PROJECT_ROOT}/pods/web/config
       type: DirectoryOrCreate
   - name: web-logs
     hostPath:
-      path: /home/sam/Bureau/DEV/smfn73-multi/pods/web/logs
+      path: ${PROJECT_ROOT}/pods/web/logs
       type: DirectoryOrCreate
   restartPolicy: Always

@@ -1,4 +1,4 @@
-{% extends 'insidiome/front/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block lang %}fr{% endblock %}
 
@@ -21,7 +21,17 @@
 {# Robots #}
 {% block robots %}index,follow{% endblock %}
 
-{% block body %}
+{# Stylesheets #}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{# Javascripts #}
+{% block javascripts %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block content %}
     <!-- Hero Section -->
     <div class="text-center mb-12 animate-fade-in">
         <h2 class="text-5xl font-bold mb-4">

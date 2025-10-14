@@ -24,6 +24,7 @@ echo "[$SCRIPT_NAME][start] Démarrage de l'orchestrateur Symfony Multi-sites"
 # Charger les utilitaires
 UTILS_SCRIPT="${SYMFONY_ROOT}/scripts/utils.sh"
 POD_ENGINE_SCRIPT="${SYMFONY_ROOT}/scripts/pod-engine.sh"
+GENERATE_CONFIGS_SCRIPT="${SYMFONY_ROOT}/scripts/generate-pod-configs.sh"
 
 if [ ! -f "$UTILS_SCRIPT" ]; then
     echo "[$SCRIPT_NAME][error] utils.sh non trouvé: ${UTILS_SCRIPT}" >&2
@@ -34,6 +35,18 @@ source "${UTILS_SCRIPT}"
 
 # Charger les variables d'environnement
 load_env 2>/dev/null || true
+
+# Générer les configurations Podman si nécessaire
+if [ -f "$GENERATE_CONFIGS_SCRIPT" ]; then
+    # Vérifier si les fichiers pod.yml existent
+    if [ ! -f "${SYMFONY_ROOT}/pods/mariadb/pod.yml" ] || [ ! -f "${SYMFONY_ROOT}/pods/web/pod.yml" ]; then
+        echo "[$SCRIPT_NAME][info] Génération des configurations Podman..."
+        "$GENERATE_CONFIGS_SCRIPT" || {
+            echo "[$SCRIPT_NAME][error] Échec de la génération des configurations"
+            exit 1
+        }
+    fi
+fi
 
 case "$1" in
     start|symfony|dev)
@@ -53,13 +66,9 @@ case "$1" in
         "${POD_ENGINE_SCRIPT}" start "${PODS_DIR}/redis"
         redis_status=$?
         
-        echo "[$SCRIPT_NAME][step] 🐘 Démarrage de PHP-FPM..."
-        "${POD_ENGINE_SCRIPT}" start "${PODS_DIR}/php"
-        php_status=$?
-        
-        echo "[$SCRIPT_NAME][step] 🌐 Démarrage d'Apache..."
-        "${POD_ENGINE_SCRIPT}" start "${PODS_DIR}/apache"
-        apache_status=$?
+        echo "[$SCRIPT_NAME][step] 🌐 Démarrage du pod Web (Apache + PHP + Composer)..."
+        "${POD_ENGINE_SCRIPT}" start "${PODS_DIR}/web"
+        web_status=$?
         
         if [ "$MODE" = "prod" ]; then
             echo "[$SCRIPT_NAME][step] 📦 Build des assets en mode production..."
@@ -75,12 +84,11 @@ case "$1" in
         echo "[$SCRIPT_NAME][info] =========================================="
         echo "[$SCRIPT_NAME][step] 📊 VÉRIFICATION DES SERVICES ESSENTIELS"
         
-        if [ $mariadb_status -eq 0 ] && [ $redis_status -eq 0 ] && [ $php_status -eq 0 ] && [ $apache_status -eq 0 ] && [ $node_status -eq 0 ]; then
+        if [ $mariadb_status -eq 0 ] && [ $redis_status -eq 0 ] && [ $web_status -eq 0 ] && [ $node_status -eq 0 ]; then
             echo "[$SCRIPT_NAME][success] ✅ Services essentiels SYMFONY démarrés avec succès"
             echo "[$SCRIPT_NAME][info] 🗄️  MariaDB    : http://${HOST}:${MARIADB_PORT}/"
             echo "[$SCRIPT_NAME][info] 🔴 Redis      : ${HOST}:${REDIS_PORT}"
-            echo "[$SCRIPT_NAME][info] 🐘 PHP-FPM    : ${HOST}:${PHP_PORT}"
-            echo "[$SCRIPT_NAME][info] 🌐 Apache     : http://${HOST}:${APACHE_PORT}/"
+            echo "[$SCRIPT_NAME][info] 🌐 Web (Apache+PHP+Composer) : http://${HOST}:${APACHE_PORT}/"
             echo "[$SCRIPT_NAME][info] 📦 Node/Vite  : http://${HOST}:${NODE_PORT}/"
             echo "[$SCRIPT_NAME][info] =========================================="
             echo "[$SCRIPT_NAME][success] 🎉 SYMFONY MULTI-SITES OPÉRATIONNEL"
@@ -89,8 +97,7 @@ case "$1" in
             echo "[$SCRIPT_NAME][error] ❌ Échec du démarrage de certains services essentiels"
             echo "[$SCRIPT_NAME][info] 🗄️  MariaDB : $([ $mariadb_status -eq 0 ] && echo "✅" || echo "❌")"
             echo "[$SCRIPT_NAME][info] 🔴 Redis   : $([ $redis_status -eq 0 ] && echo "✅" || echo "❌")"
-            echo "[$SCRIPT_NAME][info] 🐘 PHP-FPM : $([ $php_status -eq 0 ] && echo "✅" || echo "❌")"
-            echo "[$SCRIPT_NAME][info] 🌐 Apache  : $([ $apache_status -eq 0 ] && echo "✅" || echo "❌")"
+            echo "[$SCRIPT_NAME][info] 🌐 Web     : $([ $web_status -eq 0 ] && echo "✅" || echo "❌")"
             echo "[$SCRIPT_NAME][info] 📦 Node    : $([ $node_status -eq 0 ] && echo "✅" || echo "❌")"
             exit 1
         fi

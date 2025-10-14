@@ -1,3 +1,48 @@
+# 🎯 RÈGLE ABSOLUE #0 - AUDIT AVANT ACTION
+
+## ⚠️ AVANT TOUTE MODIFICATION : AUDIT OBLIGATOIRE
+
+**INTERDICTION ABSOLUE de modifier quoi que ce soit sans avoir fait :**
+
+### 1. AUDIT ARCHITECTURE (30 secondes)
+```bash
+podman pod ps                    # Pods actifs
+ls -la pods/*/pod.yml.template  # Templates existants  
+grep "start.*pods" scripts/*.sh # Ce qui est utilisé
+```
+
+### 2. QUESTIONS OBLIGATOIRES
+- ✅ Quels fichiers existent déjà ?
+- ✅ Lesquels sont réellement utilisés ?
+- ✅ Y a-t-il des doublons/incohérences ?
+- ✅ Quel travail a déjà été fait ?
+
+### 3. VALIDATION UTILISATEUR
+**Format obligatoire :**
+```
+🔍 AUDIT : [résumé situation]
+❓ OPTIONS : [liste choix possibles]
+💡 RECOMMANDATION : [choix + justification]
+⏸️ ATTENTE VALIDATION
+```
+
+## ❌ ERREURS INTERDITES
+
+- ❌ Créer des fichiers sans vérifier l'existant
+- ❌ Corriger sans comprendre l'architecture globale
+- ❌ Supposer l'intention sans demander
+- ❌ Ignorer le travail déjà fait
+
+## ✅ MÉTHODOLOGIE STRICTE
+
+```
+AUDIT → ANALYSE → VALIDATION → EXÉCUTION
+(jamais l'inverse)
+```
+
+**Voir détails complets dans `.windsurfrules-audit-architecture.md`**
+
+---
 # 🔒 RÈGLES SÉCURITÉ ET CONFIGURATION (INCONTOURNABLES)
 
 ## ❌ INTERDICTIONS ABSOLUES

@@ -21,9 +21,9 @@ make start
 
 ## Prérequis
 
-- Docker ou Podman
-- Docker Compose ou Podman Compose
+- **Podman** (recommandé) ou Docker
 - Git
+- Ports disponibles: 8080, 3306, 8081, 5173
 
 ## Installation manuelle
 
@@ -35,45 +35,40 @@ cd smfn73-multi
 
 ### 2. Configuration de l'environnement
 ```bash
-# Copier le fichier d'exemple
-cp .env.example .env
+# Copier le fichier d'exemple Podman
+cp .env.podman.example .env.podman
 
-# Éditer le fichier .env avec vos paramètres
+# Éditer le fichier .env.podman avec vos paramètres si nécessaire
 # Les valeurs par défaut fonctionnent pour un environnement de développement local
 ```
 
-### 3. Lancer les conteneurs
+### 3. Lancer les pods
 ```bash
-# Avec Docker Compose
-docker-compose up -d
+# Démarrer tous les services
+make start
 
-# Ou avec Podman Compose
-podman-compose up -d
+# Ou directement avec le script
+./scripts/symfony-orchestrator.sh start
 ```
 
-### 4. Installer les dépendances
+### 4. Vérifier l'installation
 ```bash
-# Installer les dépendances PHP (si nécessaire)
-docker exec -it symfony_web composer install
+# Voir le statut des pods
+make status
 
-# Les dépendances Node.js sont installées automatiquement au démarrage
-```
-
-### 5. Créer les bases de données
-```bash
-# Les bases de données sont créées automatiquement via le script init.sql
-# Vérifier que les deux bases existent : slns_db et nsdm_db
+# Ou
+podman pod ps
 ```
 
 ## URLs d'accès
 
 ### Applications principales
-- **Site SLNS** : http://localhost:8080 (ou le port défini dans `WEB_PORT`)
-- **Site NSDM** : http://localhost:8080 (ou le port défini dans `WEB_PORT`)
+- **Site SLNS** : http://localhost:8080/slns/
+- **Site NSDM** : http://localhost:8080/nsdm/
 
 ### Outils de développement
-- **phpMyAdmin** : http://localhost:8081 (ou le port défini dans `PHPMYADMIN_PORT`)
-- **Vite Dev Server** : http://localhost:5173 (ou le port défini dans `NODE_PORT`)
+- **phpMyAdmin** : http://localhost:8081
+- **Vite Dev Server** : http://localhost:5173
 
 ### Identifiants par défaut
 - **Base de données** : 
@@ -81,46 +76,45 @@ docker exec -it symfony_web composer install
   - Mot de passe : `symfony`
   - Root password : `root`
 
-## Commandes utiles
+## Commandes utiles (Makefile)
+
+### Gestion des pods
+
+```bash
+make start          # Démarre tous les pods en mode développement
+make dev            # Alias de start
+make prod           # Démarre en mode production (build assets)
+make stop           # Arrête tous les pods
+make status         # Affiche le statut de tous les pods
+make clean          # Nettoie les pods et fichiers temporaires
+```
 
 ### Gestion des assets (npm/Webpack Encore)
 
-#### Mode watch (développement)
 ```bash
-docker exec -it symfony_node npm run watch
+make build          # Build les assets en production
+make watch          # Lance le watch des assets (mode dev)
 ```
 
-#### Build développement
+### Commandes Symfony
+
 ```bash
-docker exec -it symfony_node npm run dev
+make composer-install  # Installe les dépendances PHP
+make npm-install       # Installe les dépendances Node
+make db-create         # Crée la base de données
+make db-migrate        # Exécute les migrations
+make db-reset          # Reset la base de données
+make cache-clear       # Vide le cache Symfony
 ```
 
-#### Build production
-```bash
-docker exec -it symfony_node npm run build
-```
+### Services individuels
 
-### Gestion des conteneurs
-
-#### Arrêter les conteneurs
 ```bash
-docker-compose down
-# ou
-podman-compose down
-```
-
-#### Voir les logs
-```bash
-docker-compose logs -f
-# ou
-podman-compose logs -f
-```
-
-#### Redémarrer un service
-```bash
-docker-compose restart web
-# ou
-podman-compose restart web
+make mariadb        # Démarre MariaDB
+make redis          # Démarre Redis
+make web            # Démarre le pod Web (Apache + PHP)
+make node           # Démarre Node.js
+make phpmyadmin     # Démarre phpMyAdmin
 ```
 
 ## Structure du projet
@@ -129,25 +123,25 @@ podman-compose restart web
 smfn73-multi/
 ├── assets/              # Assets frontend (JS, CSS)
 ├── config/              # Configuration Symfony
-├── docker/              # Configuration Docker/Podman
-│   ├── php/            # Dockerfile PHP/Apache
-│   └── mariadb/        # Scripts SQL d'initialisation
+├── pods/                # Configuration des pods Podman
+│   ├── mariadb/        # Pod MariaDB
+│   ├── redis/          # Pod Redis
+│   ├── web/            # Pod Web (Apache + PHP)
+│   ├── node/           # Pod Node.js
+│   └── phpmyadmin/     # Pod phpMyAdmin
+├── scripts/             # Scripts d'orchestration
+│   ├── symfony-orchestrator.sh  # Script principal
+│   ├── pod-engine.sh            # Moteur de gestion des pods
+│   └── utils.sh                 # Utilitaires
 ├── migrations/          # Migrations de base de données
 ├── public/              # Point d'entrée web
 ├── src/                 # Code source PHP
 ├── templates/           # Templates Twig
-├── docker-compose.yml   # Configuration Docker Compose
-├── podman-compose.yml   # Configuration Podman Compose
-└── .env                 # Variables d'environnement
+├── Makefile             # Commandes make
+└── .env.podman          # Variables d'environnement Podman
 ```
 
-## Dépannage
-
-### Les conteneurs ne démarrent pas
-=======
-# 🚀 Projet Multisite Symfony 7.3
-
-Architecture multisite avec 2 sites (Silenus & Insidiome) et 2 bases de données séparées.
+---
 
 ## 🔗 Liens Rapides
 
@@ -162,34 +156,9 @@ Architecture multisite avec 2 sites (Silenus & Insidiome) et 2 bases de données
 
 ---
 
-## 📋 Table des matières
+## 🏗️ Architecture
 
-- [Démarrage rapide](#démarrage-rapide)
-- [Architecture](#architecture)
-- [Commandes Docker](#commandes-docker)
-- [Commandes Symfony](#commandes-symfony)
-- [Documentation](#documentation)
-
----
-
-## 🎯 Démarrage Rapide
-
-### Prérequis
-- Docker et Docker Compose installés
-- Ports disponibles: 8080, 3306, 8081, 5173
-
-### Lancer le projet
-
-```bash
-# Démarrer tous les services
-docker-compose up -d
-
-# Vérifier l'état des services
-docker-compose ps
-
-# Initialiser les sites (première fois uniquement)
-docker-compose exec web php bin/console app:init-sites
-```
+Architecture multisite avec 2 sites (Silenus & Insidiome) et 2 bases de données séparées.
 
 ### Accès aux services
 
@@ -215,18 +184,15 @@ docker-compose exec web php bin/console app:init-sites
 - **MariaDB**: localhost:3306
 - **Vite/Node (assets)**: localhost:5173
 
----
+### Services Podman (Pods)
 
-## 🏗️ Architecture
-
-### Services Docker
-
-| Service | Image | Port | Description |
-|---------|-------|------|-------------|
-| **web** | php:8.3-apache | 8080 | Application Symfony |
-| **db** | mariadb:10.11 | 3306 | Base de données |
-| **node** | node:20-alpine | 5173 | npm watch (assets) |
-| **phpmyadmin** | phpmyadmin/phpmyadmin | 8081 | Interface BDD |
+| Pod | Image | Port | Description |
+|-----|-------|------|-------------|
+| **symfony-multi-web-pod** | php:8.3-apache | 8080 | Application Symfony |
+| **symfony-multi-mariadb-pod** | mariadb:10.11 | 3306 | Base de données |
+| **symfony-multi-node-pod** | node:20-alpine | 5173 | npm watch (assets) |
+| **symfony-multi-redis-pod** | redis:alpine | 6379 | Cache Redis |
+| **symfony-multi-phpmyadmin-pod** | phpmyadmin | 8081 | Interface BDD |
 
 ### Bases de Données
 
@@ -245,90 +211,77 @@ docker-compose exec web php bin/console app:init-sites
 
 ---
 
-## 🐳 Commandes Docker
+## 🎯 Commandes Podman
 
-### Gestion des services
-
-```bash
-# Démarrer
-docker-compose up -d
-
-# Arrêter
-docker-compose stop
-
-# Redémarrer
-docker-compose restart
-
-# Arrêter et supprimer
-docker-compose down
-
-# Rebuild après modification
-docker-compose up -d --build
-```
-
-### Logs
+### Gestion des pods
 
 ```bash
-# Tous les services
-docker-compose logs -f
+# Démarrer tous les pods
+make start
 
-# Service spécifique
-docker-compose logs -f web
-docker-compose logs -f node
-docker-compose logs -f db
+# Arrêter tous les pods
+make stop
+
+# Voir le statut
+make status
+
+# Nettoyer
+make clean
 ```
 
----
-
-## 🎯 Commandes Symfony
-
-### Composer
+### Commandes Symfony
 
 ```bash
-# Installer les dépendances
-docker-compose exec web composer install
+# Installer les dépendances Composer
+make composer-install
 
-# Mettre à jour
-docker-compose exec web composer update
+# Créer les bases de données
+make db-create
+
+# Exécuter les migrations
+make db-migrate
+
+# Vider le cache
+make cache-clear
 ```
 
-### Doctrine & Migrations
+### Doctrine & Migrations (commandes avancées)
 
 ```bash
 # Générer une migration pour Silenus
-docker-compose exec web php bin/console doctrine:migrations:diff --em=silenus
+podman exec -it symfony-multi-web-container php bin/console doctrine:migrations:diff --em=silenus
 
 # Générer une migration pour Insidiome
-docker-compose exec web php bin/console doctrine:migrations:diff --em=insidiome
+podman exec -it symfony-multi-web-container php bin/console doctrine:migrations:diff --em=insidiome
 
 # Exécuter les migrations Silenus
-docker-compose exec web php bin/console doctrine:migrations:migrate --em=silenus --no-interaction
+podman exec -it symfony-multi-web-container php bin/console doctrine:migrations:migrate --em=silenus --no-interaction
 
 # Exécuter les migrations Insidiome
-docker-compose exec web php bin/console doctrine:migrations:migrate --em=insidiome --no-interaction
+podman exec -it symfony-multi-web-container php bin/console doctrine:migrations:migrate --em=insidiome --no-interaction
 ```
 
 ### Commandes Custom
 
 ```bash
 # Initialiser les entités Site dans les 2 bases
-docker-compose exec web php bin/console app:init-sites
+podman exec -it symfony-multi-web-container php bin/console app:init-sites
 
 # Vider le cache
-docker-compose exec web php bin/console cache:clear
+podman exec -it symfony-multi-web-container php bin/console cache:clear
 ```
 
 ### npm (Assets)
 
 ```bash
 # Installer les dépendances
-docker-compose exec node npm install
+make npm-install
 
 # Build production
-docker-compose exec node npm run build
+make build
 
-# Watch (déjà actif dans le conteneur)
-docker-compose exec node npm run watch
+# Watch (mode développement)
+make watch
 ```
 
 ---
@@ -396,18 +349,20 @@ NODE_PORT=5173
 ### Vérifier que tout fonctionne
 
 ```bash
-# 1. Vérifier les services
-docker-compose ps
+# 1. Vérifier les pods
+make status
+# ou
+podman pod ps
 
 # 2. Vérifier les routes
-docker-compose exec web php bin/console debug:router | grep -E "(slns|nsdm)"
+podman exec -it symfony-multi-web-container php bin/console debug:router | grep -E "(slns|nsdm)"
 
 # 3. Vérifier les bases de données
-docker-compose exec db mysql -usymfony -psymfony -e "SHOW DATABASES;"
+podman exec -it symfony-multi-mariadb-container mysql -usymfony -psymfony -e "SHOW DATABASES;"
 
 # 4. Voir les tables de chaque base
-docker-compose exec db mysql -usymfony -psymfony slns_db -e "SHOW TABLES;"
-docker-compose exec db mysql -usymfony -psymfony nsdm_db -e "SHOW TABLES;"
+podman exec -it symfony-multi-mariadb-container mysql -usymfony -psymfony slns_db -e "SHOW TABLES;"
+podman exec -it symfony-multi-mariadb-container mysql -usymfony -psymfony nsdm_db -e "SHOW TABLES;"
 ```
 
 ### Test d'inscription
@@ -423,78 +378,54 @@ docker-compose exec db mysql -usymfony -psymfony nsdm_db -e "SHOW TABLES;"
 3. **Vérifier l'isolation** :
    ```bash
    # Les users doivent être dans des bases séparées
-   docker-compose exec db mysql -usymfony -psymfony slns_db -e "SELECT id, email FROM user;"
-   docker-compose exec db mysql -usymfony -psymfony nsdm_db -e "SELECT id, email FROM user;"
+   podman exec -it symfony-multi-mariadb-container mysql -usymfony -psymfony slns_db -e "SELECT id, email FROM user;"
+   podman exec -it symfony-multi-mariadb-container mysql -usymfony -psymfony nsdm_db -e "SELECT id, email FROM user;"
    ```
 
 ---
 
 ## 🚨 Dépannage
 
-### Les services ne démarrent pas
+### Les pods ne démarrent pas
 
->>>>>>> cd96ac4e809eb12db41eb411fae8c4001a7d21a7
 ```bash
 # Vérifier les logs
-docker-compose logs
+make logs
+# ou
+podman pod ps
+podman logs symfony-multi-web-pod
 
-<<<<<<< HEAD
 # Vérifier que les ports ne sont pas déjà utilisés
-netstat -an | findstr "8080 8081 3306 5173"
+ss -tulpn | grep -E "8080|8081|3306|5173"
 ```
 
 ### Erreur de connexion à la base de données
+
 ```bash
-# Vérifier que le conteneur de base de données est démarré
-docker ps | findstr symfony_db
+# Vérifier que le pod MariaDB est démarré
+podman pod ps | grep mariadb
 
 # Se connecter au conteneur pour vérifier
-docker exec -it symfony_db mysql -u symfony -psymfony
+podman exec -it symfony-multi-mariadb-container mysql -u symfony -psymfony
 ```
 
 ### Les assets ne se compilent pas
+
 ```bash
-# Redémarrer le conteneur Node
-docker-compose restart node
+# Redémarrer le pod Node
+./scripts/symfony-orchestrator.sh stop node
+./scripts/symfony-orchestrator.sh start node
 
 # Vérifier les logs
-docker logs symfony_node
+podman logs symfony-multi-node-container
 ```
 
-## Documentation
-
-Pour plus d'informations sur l'architecture multi-site, consulter le fichier `mutli-site.html`.
-
-## Contribution
-
-1. Créer une branche pour votre fonctionnalité
-2. Commiter vos changements
-3. Pousser vers la branche
-4. Créer une Pull Request
-=======
-# Reconstruire les images
-docker-compose down
-docker-compose up -d --build
-```
-
-### Erreur de connexion à la base
+### Rebuild complet
 
 ```bash
-# Vérifier que MariaDB est démarré
-docker-compose ps db
-
-# Tester la connexion
-docker-compose exec db mysql -usymfony -psymfony -e "SHOW DATABASES;"
-```
-
-### Les migrations échouent
-
-```bash
-# Vérifier l'état des migrations
-docker-compose exec web php bin/console doctrine:migrations:status --em=silenus
-
-# Forcer la synchronisation du schéma (dev uniquement)
-docker-compose exec web php bin/console doctrine:schema:update --em=silenus --force
+# Nettoyer et redémarrer
+make clean
+make start
 ```
 
 ---

@@ -45,10 +45,11 @@ make build
 make cache-clear
 ```
 
-#### 5. Conteneur node pas redémarré
+#### 5. Pod node pas redémarré
 ```bash
-docker compose restart node
-docker compose logs node
+./scripts/symfony-orchestrator.sh stop node
+./scripts/symfony-orchestrator.sh start node
+podman logs symfony-multi-node-container
 ```
 
 ---
@@ -114,18 +115,19 @@ make build
 
 ---
 
-## 🔴 Les conteneurs ne démarrent pas
+## 🔴 Les pods ne démarrent pas
 
 ### Vérifier l'état
 ```bash
-docker compose ps
-docker compose logs
+make status
+podman pod ps
+podman logs symfony-multi-web-pod
 ```
 
 ### Redémarrer
 ```bash
-docker compose down
-docker compose up -d
+make stop
+make start
 ```
 
 ### Reset complet
@@ -159,17 +161,17 @@ Bind for 0.0.0.0:8000 failed: port is already allocated
 ```
 
 ### Solution
-Modifier les ports dans `.env` :
+Modifier les ports dans `.env.podman` :
 ```bash
-WEB_PORT=8001
-DB_PORT_EXTERNAL=3307
+APACHE_PORT=8001
+MARIADB_PORT=3307
 PHPMYADMIN_PORT=8082
 ```
 
 Puis :
 ```bash
-docker compose down
-docker compose up -d
+make stop
+make start
 ```
 
 ---
@@ -178,8 +180,8 @@ docker compose up -d
 
 ### Vérifier
 ```bash
-docker compose ps db
-docker compose logs db
+podman pod ps | grep mariadb
+podman logs symfony-multi-mariadb-container
 ```
 
 ### Recréer
@@ -193,11 +195,11 @@ make db-reset
 
 ```bash
 make check              # Vérification complète
+make status             # État des pods
 make logs               # Voir tous les logs
-docker compose ps       # État des conteneurs
-docker compose logs node    # Logs du build assets
-docker compose logs web     # Logs Symfony
-docker compose logs db      # Logs base de données
+podman logs symfony-multi-node-container    # Logs du build assets
+podman logs symfony-multi-web-container     # Logs Symfony
+podman logs symfony-multi-mariadb-container # Logs base de données
 ```
 
 ---
@@ -208,7 +210,7 @@ Si rien ne fonctionne :
 
 ```bash
 # 1. Tout arrêter et nettoyer
-docker compose down -v
+make clean
 rm -rf node_modules vendor var/cache/* var/log/*
 rm -f assets/app.js assets/bootstrap.js
 

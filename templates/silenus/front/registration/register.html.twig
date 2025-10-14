@@ -1,4 +1,4 @@
-{% extends 'silenus/front/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block lang %}fr{% endblock %}
 
@@ -21,7 +21,17 @@
 {# Robots - Ne pas indexer les pages d'inscription #}
 {% block robots %}noindex,follow{% endblock %}
 
-{% block body %}
+{# Stylesheets #}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{# Javascripts #}
+{% block javascripts %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block content %}
     <div class="max-w-md mx-auto">
         <!-- Header -->
         <div class="text-center mb-8 animate-fade-in">

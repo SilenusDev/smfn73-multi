@@ -5,18 +5,18 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: symfony-multi-redis-pod
+  name: ${PROJECT_NAME}-redis-pod
   labels:
-    app: symfony-multi
+    app: ${PROJECT_NAME}
     service: redis
     category: cache
 spec:
   containers:
-  - name: symfony-multi-redis
-    image: docker.io/library/redis:7-alpine
+  - name: ${PROJECT_NAME}-redis
+    image: ${IMAGE_REDIS}
     ports:
     - containerPort: 6379
-      hostPort: 6379
+      hostPort: ${REDIS_PORT}
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     volumeMounts:
     - name: redis-data
@@ -26,10 +26,10 @@ spec:
   volumes:
   - name: redis-data
     hostPath:
-      path: /home/sam/Bureau/DEV/smfn73-multi/pods/redis/data
+      path: ${PROJECT_ROOT}/pods/redis/data
       type: DirectoryOrCreate
   - name: redis-config
     hostPath:
-      path: /home/sam/Bureau/DEV/smfn73-multi/pods/redis/config
+      path: ${PROJECT_ROOT}/pods/redis/config
       type: DirectoryOrCreate
   restartPolicy: Always
