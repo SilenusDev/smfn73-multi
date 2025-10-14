@@ -184,15 +184,19 @@ Architecture multisite avec 2 sites (Silenus & Insidiome) et 2 bases de données
 - **MariaDB**: localhost:3306
 - **Vite/Node (assets)**: localhost:5173
 
-### Services Podman (Pods)
+### Services Podman (Architecture Pod Unique)
 
-| Pod | Image | Port | Description |
-|-----|-------|------|-------------|
-| **symfony-multi-web-pod** | php:8.3-apache | 8080 | Application Symfony |
-| **symfony-multi-mariadb-pod** | mariadb:10.11 | 3306 | Base de données |
-| **symfony-multi-node-pod** | node:20-alpine | 5173 | npm watch (assets) |
-| **symfony-multi-redis-pod** | redis:alpine | 6379 | Cache Redis |
-| **symfony-multi-phpmyadmin-pod** | phpmyadmin | 8081 | Interface BDD |
+| Pod | Conteneurs | Ports | Description |
+|-----|------------|-------|-------------|
+| **symfony-multi-pod** | Apache + PHP-FPM + MariaDB + Node.js + Composer | 6900 (HTTP), 9000 (PHP-FPM), 6909 (MariaDB), 6904 (Node) | Pod unique contenant tous les services essentiels - Communication via localhost |
+| **symfony-multi-redis-pod** | redis:7-alpine | 6379 | Cache Redis (optionnel) |
+| **symfony-multi-phpmyadmin-pod** | phpmyadmin:latest | 6908 | Interface BDD (optionnel) |
+
+**Avantages de l'architecture pod unique :**
+- ✅ Tous les services communiquent via `localhost` (simple et rapide)
+- ✅ Pas de problèmes de résolution DNS entre pods
+- ✅ Configuration portable et facile à maintenir
+- ✅ Démarrage/arrêt atomique de tous les services essentiels
 
 ### Bases de Données
 

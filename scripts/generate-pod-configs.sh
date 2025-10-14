@@ -112,10 +112,8 @@ echo "[$SCRIPT_NAME][step] =========================================="
 echo
 
 SERVICES=(
-    "mariadb"
+    "symfony"
     "redis"
-    "web"
-    "node"
     "phpmyadmin"
 )
 
