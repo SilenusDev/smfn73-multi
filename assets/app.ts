@@ -14,6 +14,7 @@ import {
     AlertCircle, 
     Zap,
     LogIn,
+    LogOut,
     UserPlus,
     Building2,
     Shield,
@@ -27,7 +28,11 @@ import {
     Database,
     Palette,
     Layers,
-    Target
+    Target,
+    Menu,
+    Home,
+    Info,
+    User
 } from 'lucide';
 
 // Initialize Lucide icons on page load
@@ -38,6 +43,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
             AlertCircle,
             Zap,
             LogIn,
+            LogOut,
             UserPlus,
             Building2,
             Shield,
@@ -51,7 +57,11 @@ document.addEventListener('DOMContentLoaded', (): void => {
             Database,
             Palette,
             Layers,
-            Target
+            Target,
+            Menu,
+            Home,
+            Info,
+            User
         }
     });
 });

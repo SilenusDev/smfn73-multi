@@ -26,10 +26,10 @@ spec:
   volumes:
   - name: redis-data
     hostPath:
-      path: /home/sam/Bureau/dev/production/smfn_73_multi/pods/redis/data
+      path: /home/sam/Bureau/DEV/smfn73-multi/pods/redis/data
       type: DirectoryOrCreate
   - name: redis-config
     hostPath:
-      path: /home/sam/Bureau/dev/production/smfn_73_multi/pods/redis/config
+      path: /home/sam/Bureau/DEV/smfn73-multi/pods/redis/config
       type: DirectoryOrCreate
   restartPolicy: Always

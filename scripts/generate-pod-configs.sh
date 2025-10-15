@@ -113,6 +113,7 @@ echo
 
 SERVICES=(
     "symfony"
+    "mariadb"
     "redis"
     "phpmyadmin"
 )

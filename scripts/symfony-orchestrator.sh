@@ -39,7 +39,7 @@ load_env 2>/dev/null || true
 # Générer les configurations Podman si nécessaire
 if [ -f "$GENERATE_CONFIGS_SCRIPT" ]; then
     # Vérifier si les fichiers pod.yml existent
-    if [ ! -f "${SYMFONY_ROOT}/pods/mariadb/pod.yml" ] || [ ! -f "${SYMFONY_ROOT}/pods/web/pod.yml" ]; then
+    if [ ! -f "${SYMFONY_ROOT}/pods/symfony/pod.yml" ] || [ ! -f "${SYMFONY_ROOT}/pods/redis/pod.yml" ]; then
         echo "[$SCRIPT_NAME][info] Génération des configurations Podman..."
         "$GENERATE_CONFIGS_SCRIPT" || {
             echo "[$SCRIPT_NAME][error] Échec de la génération des configurations"
@@ -55,50 +55,38 @@ case "$1" in
             MODE="prod"
         fi
         
-        echo "[$SCRIPT_NAME][start] 🚀 DÉMARRAGE DES SERVICES ESSENTIELS SYMFONY (mode: $MODE)"
+        echo "[$SCRIPT_NAME][start] 🚀 DÉMARRAGE DU POD UNIQUE SYMFONY (mode: $MODE)"
         echo "[$SCRIPT_NAME][info] =========================================="
+        echo "[$SCRIPT_NAME][info] Architecture: Pod unique contenant tous les services"
+        echo "[$SCRIPT_NAME][info] Services: Apache + PHP + MariaDB + Node + Composer"
         
-        echo "[$SCRIPT_NAME][step] 🗄️  Démarrage de MariaDB..."
-        "${POD_ENGINE_SCRIPT}" start "${PODS_DIR}/mariadb"
-        mariadb_status=$?
+        echo "[$SCRIPT_NAME][step] 🚀 Démarrage du pod Symfony (tous services)..."
+        "${POD_ENGINE_SCRIPT}" start "${PODS_DIR}/symfony"
+        symfony_status=$?
         
-        echo "[$SCRIPT_NAME][step] 🔴 Démarrage de Redis..."
+        echo "[$SCRIPT_NAME][step] 🔴 Démarrage de Redis (pod séparé)..."
         "${POD_ENGINE_SCRIPT}" start "${PODS_DIR}/redis"
         redis_status=$?
-        
-        echo "[$SCRIPT_NAME][step] 🌐 Démarrage du pod Web (Apache + PHP + Composer)..."
-        "${POD_ENGINE_SCRIPT}" start "${PODS_DIR}/web"
-        web_status=$?
-        
-        if [ "$MODE" = "prod" ]; then
-            echo "[$SCRIPT_NAME][step] 📦 Build des assets en mode production..."
-            podman run --rm -v "${SYMFONY_ROOT}:/app:z" -w /app docker.io/library/node:20-alpine sh -c "npm install && npm run build"
-            node_status=$?
-            echo "[$SCRIPT_NAME][info] Assets buildés pour la production"
-        else
-            echo "[$SCRIPT_NAME][step] 📦 Démarrage de Node.js (watch mode)..."
-            "${POD_ENGINE_SCRIPT}" start "${PODS_DIR}/node"
-            node_status=$?
-        fi
         
         echo "[$SCRIPT_NAME][info] =========================================="
         echo "[$SCRIPT_NAME][step] 📊 VÉRIFICATION DES SERVICES ESSENTIELS"
         
-        if [ $mariadb_status -eq 0 ] && [ $redis_status -eq 0 ] && [ $web_status -eq 0 ] && [ $node_status -eq 0 ]; then
+        if [ $symfony_status -eq 0 ] && [ $redis_status -eq 0 ]; then
             echo "[$SCRIPT_NAME][success] ✅ Services essentiels SYMFONY démarrés avec succès"
-            echo "[$SCRIPT_NAME][info] 🗄️  MariaDB    : http://${HOST}:${MARIADB_PORT}/"
+            echo "[$SCRIPT_NAME][info] 🚀 Pod Symfony : http://${HOST}:${APACHE_PORT}/"
+            echo "[$SCRIPT_NAME][info]    ├─ 🌐 Apache  : Port ${APACHE_PORT}"
+            echo "[$SCRIPT_NAME][info]    ├─ 🐘 PHP-FPM : Port 9000"
+            echo "[$SCRIPT_NAME][info]    ├─ 🗄️  MariaDB : Port ${MARIADB_PORT}"
+            echo "[$SCRIPT_NAME][info]    ├─ 📦 Node.js : Port ${NODE_PORT}"
+            echo "[$SCRIPT_NAME][info]    └─ 🎼 Composer: Disponible"
             echo "[$SCRIPT_NAME][info] 🔴 Redis      : ${HOST}:${REDIS_PORT}"
-            echo "[$SCRIPT_NAME][info] 🌐 Web (Apache+PHP+Composer) : http://${HOST}:${APACHE_PORT}/"
-            echo "[$SCRIPT_NAME][info] 📦 Node/Vite  : http://${HOST}:${NODE_PORT}/"
             echo "[$SCRIPT_NAME][info] =========================================="
             echo "[$SCRIPT_NAME][success] 🎉 SYMFONY MULTI-SITES OPÉRATIONNEL"
             echo "[$SCRIPT_NAME][info] =========================================="
         else
             echo "[$SCRIPT_NAME][error] ❌ Échec du démarrage de certains services essentiels"
-            echo "[$SCRIPT_NAME][info] 🗄️  MariaDB : $([ $mariadb_status -eq 0 ] && echo "✅" || echo "❌")"
-            echo "[$SCRIPT_NAME][info] 🔴 Redis   : $([ $redis_status -eq 0 ] && echo "✅" || echo "❌")"
-            echo "[$SCRIPT_NAME][info] 🌐 Web     : $([ $web_status -eq 0 ] && echo "✅" || echo "❌")"
-            echo "[$SCRIPT_NAME][info] 📦 Node    : $([ $node_status -eq 0 ] && echo "✅" || echo "❌")"
+            echo "[$SCRIPT_NAME][info] 🚀 Pod Symfony : $([ $symfony_status -eq 0 ] && echo "✅" || echo "❌")"
+            echo "[$SCRIPT_NAME][info] 🔴 Redis       : $([ $redis_status -eq 0 ] && echo "✅" || echo "❌")"
             exit 1
         fi
         ;;
